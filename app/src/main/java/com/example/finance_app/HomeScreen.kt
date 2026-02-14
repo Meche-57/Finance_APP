@@ -1,7 +1,4 @@
 package com.example.finance_app
-
-import android.R
-import android.R.attr.top
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.*
@@ -28,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.finance_app.components.BalanceCard
+import com.example.finance_app.components.BudgetCard
+import com.example.finance_app.components.Recent_Activity
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
 import com.example.finance_app.ui.theme.Card_Navy
@@ -68,128 +68,25 @@ fun HomeScreen() {
                 )
             }
 
-            // OVERLAPPING CARD: Position the BalanceCard here
-            // It is aligned to the top and then pushed down to create the overlap
-            Box(
+            //Positions of the cards
+            Column (
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 130.dp) // Adjust this value to control the overlap
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 BalanceCard()
+                BudgetCard()
+                Recent_Activity()
+
+
+            }
+
 
             }
         }
     }
-}
-
-@Composable
-fun BalanceCard() {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Card_Navy.copy(0.9f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .padding(top = 30.dp)
-
-    ){
-// makes the card bigger
-                Column(modifier = Modifier.padding(40.dp)){
-
-                    Text(
-                        text = "Total Balance",
-                        color = Color.LightGray,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
-                    )
-
-                    Text(
-                        text = "$6,000.00",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-
-
-
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    HorizontalDivider(color = Color.LightGray.copy(0.9f))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-
-
-                    ){
-                        //income
-                        Column {
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Text(text = "Income", color = Color.Green, fontSize = 12.sp)
-
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "$1,500", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                        }
-
-                        Spacer(modifier = Modifier.width(120.dp)) // spacce between easier to freely edit instead of weight or inbetweens
-
-
-                        Column(horizontalAlignment = Alignment.Start) {
-                            Spacer(modifier = Modifier.height(20.dp))
-
-                            Text(text = "Expense", color = Color.Red, fontSize = 12.sp)
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "$1,500", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                        }
-                    }
-
-                    //
-
-
-                // use box for the budget status instead
-               // Box(
-                  // modifier = Modifier
-                       //.width(100.dp)
-                       //.height(30.dp)
-                       //.background(Card_Navy, RoundedCornerShape(8.dp)),
-                       // contentAlignment = Alignment.Center ) {
-                    //Text("18%", color = Color.White, fontWeight = FontWeight.Bold)
-                //}
-
-
-
-
-                        //.align(Alignment.TopStart)
-                       // .padding(top = 150.dp)
-                        //.size(width = 320.dp, height = 200.dp)
-                       // .background(Color.Black, shape = RoundedCornerShape(20.dp)),
-                  //  contentAlignment = Alignment.TopStart
-
-
-               // ) {
-
-                   // Text(
-                      //  text = "Total Balance",
-                        //color = Color.White,
-                        //fontWeight = FontWeight.Bold,
-                        //fontSize = 32.sp,
-                       // modifier = Modifier.padding(10.dp),
-
-                       // )
-
-
-                }
-
-
-            }
-
-        }
-
-
-
-
-
-
 
 @Composable
 @Preview(showBackground = true)

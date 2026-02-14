@@ -17,3 +17,4 @@ import androidx.compose.ui.graphics.Color
  val BudgetRed = Color(0xFFBD2A26)
 
  val Text_White = Color(0xFFFFFFFF)
+val Text_Grey = Color(0xFF696767)
