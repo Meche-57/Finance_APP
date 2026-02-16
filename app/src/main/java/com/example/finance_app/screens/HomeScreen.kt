@@ -1,4 +1,4 @@
-package com.example.finance_app
+package com.example.finance_app.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.*
@@ -11,18 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.finance_app.components.BalanceCard
@@ -30,9 +21,7 @@ import com.example.finance_app.components.BudgetCard
 import com.example.finance_app.components.Recent_Activity
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
-import com.example.finance_app.ui.theme.Card_Navy
-
-
+import androidx.navigation.compose.rememberNavController
 
 
 @Composable
@@ -44,7 +33,6 @@ fun HomeScreen() {
 
 
     ){
-
 
         // This is the box at the top of the screen
 
@@ -79,6 +67,10 @@ fun HomeScreen() {
                 BalanceCard()
                 BudgetCard()
                 Recent_Activity()
+
+
+
+
 
 
             }
