@@ -11,12 +11,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.finance_app.components.Nav_bar
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.example.finance_app.screens.HomeScreen
 import com.example.finance_app.ui.theme.Finance_APPTheme
+
+
+lateinit var spendingDao: SpendingDao
+lateinit var db: AppDatabase
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // creating an instance (object) of my DB
+
+        db = Room.databaseBuilder(this, AppDatabase::class.java, "MySpendingDatabase").build()
+        spendingDao = db.spendingDao()
+
+
         setContent {
             Finance_APPTheme {
 
