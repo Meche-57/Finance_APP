@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Text_White,
+    primary =  Back_Navy,
     secondary = Card_Navy,
     tertiary = IncomeGreen,
     background = Back_Navy
@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = Card_Navy,
     secondary = Back_Navy,
-    background = Color.White
+    background = Back_Navy
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

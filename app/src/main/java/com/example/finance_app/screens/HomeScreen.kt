@@ -21,7 +21,7 @@ import com.example.finance_app.components.BudgetCard
 import com.example.finance_app.components.Recent_Activity
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
-import androidx.navigation.compose.rememberNavController
+
 
 
 @Composable

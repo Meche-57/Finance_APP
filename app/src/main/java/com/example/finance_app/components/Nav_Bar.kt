@@ -1,23 +1,17 @@
 package com.example.finance_app.components
-
-
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
-
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.finance_app.screens.HomeScreen
 import com.example.finance_app.screens.TransactionScreen
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.compose.*
 import com.example.finance_app.ui.theme.Card_Navy
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
