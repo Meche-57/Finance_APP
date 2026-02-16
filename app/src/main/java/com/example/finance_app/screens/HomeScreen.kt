@@ -41,17 +41,17 @@ fun HomeScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(155.dp)
                     .background(Box_Navy),
                 contentAlignment = Alignment.TopStart
             ) {
                 // context inside the box
 
                 Text(
-                    text = "Hello User,",
+                    text = "Hello User ,",
                     color = Color.White,
                     fontSize = 32.sp,
-                    modifier = Modifier.padding(top = 90.dp, start = 20.dp)
+                    modifier = Modifier.padding(top = 60.dp, start = 20.dp)
 
                 )
             }
@@ -60,7 +60,7 @@ fun HomeScreen() {
             Column (
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 130.dp) // Adjust this value to control the overlap
+                    .padding(top = 95.dp) // Adjust this value to control the overlap
                     .padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {

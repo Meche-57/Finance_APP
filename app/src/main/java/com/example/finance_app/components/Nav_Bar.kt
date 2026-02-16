@@ -14,9 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.Color
 import com.example.finance_app.ui.theme.Card_Navy
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+
 import androidx.compose.material3.Icon
+import com.example.finance_app.screens.ForecastScreen
+import com.example.finance_app.screens.LoanScreen
 
 
 @Composable 
@@ -43,6 +48,28 @@ fun Nav_bar(navController: NavHostController) {
                     onClick = { navController.navigate("transaction") },
                     label = { Text("Transactions") }
                 )
+
+
+                NavigationBarItem(
+                    icon = {Icon(Icons.Filled.Check, contentDescription = "Forecast")},
+                    selected = false,
+                    onClick = { navController.navigate("Forecast") },
+                    label = { Text("Forecast") }
+                )
+
+                NavigationBarItem(
+                    icon = {Icon(Icons.Filled.DateRange, contentDescription = "Loan")},
+                    selected = false,
+                    onClick = { navController.navigate("Loan") },
+                    label = { Text("Loan") }
+                )
+
+
+
+
+
+
+
             }
         }
 
@@ -57,6 +84,8 @@ fun Nav_bar(navController: NavHostController) {
         ) {
             composable("dashboard") { HomeScreen() }
             composable("transaction") { TransactionScreen() }
+            composable("Forecast") { ForecastScreen() }
+            composable("Loan") { LoanScreen() }
         }
     }
 }
