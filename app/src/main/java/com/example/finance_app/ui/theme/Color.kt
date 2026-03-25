@@ -7,7 +7,9 @@ import androidx.compose.ui.graphics.Color
  val Back_Navy = Color(0xFF0D0E19)
  val Card_Navy =  Color(0xFF1E2237)
  val Box_Navy = Color(0xFF231A55)
-
+val Green_Card = Color(0xFF0F6849)
+val Purple_Card = Color(0xFF32276A)
+val Blue_Card = Color(0xFF092546)
  //  Palette for text
 
  val IncomeGreen = Color(0xFF4CAF50)
