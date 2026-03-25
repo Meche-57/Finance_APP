@@ -41,10 +41,11 @@ fun ForecastProjectionCard() {
 
             ForecastBalanceCard(
 
-                title = "Predicted Balance                       End of March",
-                value = "$1,500",
+                title = "Predicted Balance",
+                value = "$10,500",
                 desc = "Based on current spending trends",
                 modifier = Modifier.fillMaxWidth(),
+                status = "End of March ",
                 backgroundColor = Green_Card
 
             )
@@ -53,10 +54,12 @@ fun ForecastProjectionCard() {
 
             ForecastBalanceCard(
                 title = "End of April",
-                value = "$1,500",
+                value = "$11,500",
                 desc = "Daily Spending:$150.51/day ",
                 modifier = Modifier.fillMaxWidth(),
+                status = "",
                 backgroundColor = Purple_Card
+
             )
 
 

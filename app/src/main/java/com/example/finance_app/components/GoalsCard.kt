@@ -26,7 +26,7 @@ import androidx.compose.material3.LinearProgressIndicator
 fun GoalsCard(){
 
     Card(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors( containerColor = Card_Navy) )
 
@@ -45,78 +45,72 @@ fun GoalsCard(){
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.SpaceBetween
 
 
             ) {
 
-                Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Emergency Fund", color = Text_White)
-
-                Spacer(modifier = Modifier.width(100.dp))
-
-                Spacer(modifier = Modifier.padding(8.dp))
                 Text(text = "$3,000 / $10,000 ", color = Text_White)
 
 
             }
-            Column(modifier = Modifier.padding(10.dp)) {
+
+
+            Column(modifier = Modifier.padding(12.dp)) {
 
                 LinearProgressIndicator(
                     progress = { 0.35f },
                     modifier = Modifier.fillMaxWidth(),
+                    color = IncomeGreen
                 )
 
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
 
                 Text(text = "35% complete" , color = Text_White)
 
 
             }
 
+            Spacer(modifier = Modifier.padding(10.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.SpaceBetween
 
 
             ) {
 
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "New Car", color = Text_White)
-
-                Spacer(modifier = Modifier.width(150.dp))
-
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(text = "$3,000 / $10,000 ", color = Text_White)
-
-
-            }
-            Column(modifier = Modifier.padding(10.dp)) {
-
-                LinearProgressIndicator(
-                    progress = { 0.35f },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                Spacer(modifier = Modifier.padding(2.dp))
-
-                Text(text = "35% complete" , color = Text_White)
-
-
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-
-
-            ) {
-
-                Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Vacation", color = Text_White)
+                Text(text = "$3,000 / $10,000 ", color = Text_White)
 
-                Spacer(modifier = Modifier.width(150.dp))
 
+            }
+            Column(modifier = Modifier.padding(10.dp)) {
+
+                LinearProgressIndicator(
+                    progress = { 0.35f },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = BudgetBlue
+                )
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                Text(text = "35% complete" , color = Text_White)
+
+
+            }
+
+            Spacer(modifier = Modifier.padding(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+
+
+            ) {
+
+                Text(text = "New Car", color = Text_White)
                 Spacer(modifier = Modifier.padding(8.dp))
                 Text(text = "$1,000 / $5,000 ", color = Text_White)
 
@@ -127,9 +121,10 @@ fun GoalsCard(){
                 LinearProgressIndicator(
                     progress = { 0.35f },
                     modifier = Modifier.fillMaxWidth(),
+                    color = BudgetYellow
                 )
 
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
 
                 Text(text = "35% complete" , color = Text_White)
 
@@ -144,6 +139,8 @@ fun GoalsCard(){
         }
 
     }}
+
+
 
 
 

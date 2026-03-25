@@ -17,6 +17,7 @@ val Blue_Card = Color(0xFF092546)
  val BudgetOrange = Color(0xFFFF9800)
  val BudgetYellow = Color(0xFFFFEB3B)
  val BudgetRed = Color(0xFFBD2A26)
+val BudgetBlue = Color(0xFF3B81F4)
 
  val Text_White = Color(0xFFFFFFFF)
 val Text_Grey = Color(0xFF696767)
