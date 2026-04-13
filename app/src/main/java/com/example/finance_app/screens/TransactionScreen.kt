@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
-
+@Preview
 @Composable
 fun TransactionScreen() {
 

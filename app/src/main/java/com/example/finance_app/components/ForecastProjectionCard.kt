@@ -39,7 +39,7 @@ fun ForecastProjectionCard() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ForecastBalanceCard(
+            SmallBalanceCards(
 
                 title = "Predicted Balance",
                 value = "$10,500",
@@ -52,7 +52,7 @@ fun ForecastProjectionCard() {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            ForecastBalanceCard(
+            SmallBalanceCards(
                 title = "End of April",
                 value = "$11,500",
                 desc = "Daily Spending:$150.51/day ",

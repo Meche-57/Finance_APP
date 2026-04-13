@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.finance_app.components.ForecastBalanceCard
+import com.example.finance_app.components.SmallBalanceCards
 import com.example.finance_app.components.ForecastProjectionCard
 import com.example.finance_app.components.GoalsCard
 import com.example.finance_app.ui.theme.*
@@ -47,7 +47,7 @@ fun ForecastScreen() {
 
 
             ) {
-                ForecastBalanceCard(
+                SmallBalanceCards(
                     title = "Current Balance",
                     value = "$12,465",
                     desc = "Day 13 of 30",
@@ -58,7 +58,7 @@ fun ForecastScreen() {
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
-                ForecastBalanceCard(
+                SmallBalanceCards(
 
                     title = "Average Spending ",
                     value = "$12,465",
