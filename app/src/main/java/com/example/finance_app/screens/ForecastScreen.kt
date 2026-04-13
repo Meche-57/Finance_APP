@@ -74,7 +74,31 @@ fun ForecastScreen() {
             }
 
             Spacer(modifier = Modifier.height(10.dp))
-            GoalsCard()
+
+
+            GoalsCard(
+                title = "Goal 1",
+                current = 200.0,
+                goal = 10000.0,
+                color = Card_Navy
+
+            )
+
+            GoalsCard(
+                title = "Goal 2",
+                current = 5000.0,
+                goal = 10000.0,
+                color = Card_Navy
+
+            )
+
+            GoalsCard(
+                title = "Goal 3",
+                current = 7800.0,
+                goal = 10000.0,
+                color = Card_Navy
+
+            )
         }
     }
 }

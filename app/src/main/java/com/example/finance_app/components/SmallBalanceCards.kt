@@ -22,8 +22,6 @@ import com.example.finance_app.ui.theme.*
 
 @Composable
 
-
-
 fun SmallBalanceCards(
     title: String,
     value: String,
