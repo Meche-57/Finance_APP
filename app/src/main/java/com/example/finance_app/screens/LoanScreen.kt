@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -17,17 +20,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-import com.example.finance_app.Goal
 import com.example.finance_app.components.GoalsCard
 import com.example.finance_app.components.LoanCalculator
 import com.example.finance_app.ui.theme.Card_Navy
+import com.example.finance_app.Goals
+import com.example.finance_app.goalsDao
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-
-
-
 
 
 fun LoanScreen() {
@@ -36,11 +39,16 @@ fun LoanScreen() {
     var current by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
 
-    var goalsList by remember { mutableStateOf(emptyList<Goal>()) }
+    val scope = rememberCoroutineScope()
+    var goalsList by remember { mutableStateOf(emptyList<Goals>()) }
     var showDialog by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) { // show data when app is opened
+        goalsList = goalsDao.getAll()
+    }
 
-    Column(modifier = Modifier.padding(15.dp)) {
+    Column(modifier = Modifier.padding(15.dp)
+        .verticalScroll(rememberScrollState())) {
 
         LoanCalculator()
 
@@ -106,15 +114,22 @@ fun LoanScreen() {
 
             confirmButton = {
                 Button(onClick = {
-                    goalsList = goalsList + Goal(
-                        title = title,
-                        current = current.toDoubleOrNull() ?: 0.0,
-                        goal = goal.toDoubleOrNull() ?: 0.0
-                    )
-                    title = ""
-                    current = ""
-                    goal = ""
-                    showDialog = false
+                    scope.launch {
+                        goalsDao.insertGoal(
+
+                            Goals(
+                                title = title,
+                                current = current.toDoubleOrNull() ?: 0.0,
+                                goal = goal.toDoubleOrNull() ?: 0.0
+                            )
+                        )
+                        goalsList = goalsDao.getAll()
+
+                        title = ""
+                        current = ""
+                        goal = ""
+                        showDialog = false
+                    }
 
                 }) {
                     Text("Add")
@@ -126,9 +141,6 @@ fun LoanScreen() {
                     Text("Cancel")
                 }
 
-                goalsList.forEach { item ->
-                    Text(text = "Name: ${item.title}, Amount: ${item.current}, Date: ${item.goal}")
-                }
             }
         )
     }

@@ -17,6 +17,7 @@ import com.example.finance_app.ui.theme.Finance_APPTheme
 
 
 lateinit var spendingDao: SpendingDao
+lateinit var goalsDao: GoalsDao
 lateinit var db: AppDatabase
 
 
@@ -26,8 +27,12 @@ class MainActivity : ComponentActivity() {
 
         // creating an instance (object) of my DB
 
-        db = Room.databaseBuilder(this, AppDatabase::class.java, "MySpendingDatabase").build()
+        db = Room.databaseBuilder(this, AppDatabase::class.java, "MySpendingDatabase")
+            .fallbackToDestructiveMigration() // To prevent crashes when the database
+            .build()
         spendingDao = db.spendingDao()
+        goalsDao = db.goalsDao()
+
 
 
         setContent {
