@@ -1,8 +1,11 @@
 package com.example.finance_app.screens
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -38,7 +41,7 @@ fun LoanScreen() {
     var title by remember { mutableStateOf("") }
     var current by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
-
+    var editingGoal by remember { mutableStateOf<Goals?>(null) } // editGoal
     val scope = rememberCoroutineScope()
     var goalsList by remember { mutableStateOf(emptyList<Goals>()) }
     var showDialog by remember { mutableStateOf(false) }
@@ -54,11 +57,20 @@ fun LoanScreen() {
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        Button(onClick = { showDialog = true }) {
+        Row(modifier = Modifier.fillMaxWidth(),
+         horizontalArrangement = Arrangement.End){
+
+        Button(onClick = {
+            editingGoal = null
+            title = ""
+            current = ""
+            goal = ""
+            showDialog = true
+        }) {
             Text("Add Goal")
 
         }
-
+}
         Spacer(modifier = Modifier.height(25.dp))
 
         goalsList.forEach { item ->
@@ -68,7 +80,18 @@ fun LoanScreen() {
                 title = item.title,
                 current = item.current,
                 goal = item.goal,
-                color = Card_Navy
+                color = Card_Navy,
+
+                // When Edit button is pressed
+
+                editClick = {
+                    editingGoal = item
+                    title = item.title
+                    current = item.current.toString()
+                    goal = item.goal.toString()
+                    showDialog = true
+                }
+
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -80,7 +103,6 @@ fun LoanScreen() {
 
         AlertDialog(
             onDismissRequest = { showDialog = false },// when user closes it,
-
             title = { Text("Add Goal") },
 
             text = {
@@ -115,6 +137,8 @@ fun LoanScreen() {
             confirmButton = {
                 Button(onClick = {
                     scope.launch {
+
+                        if (editingGoal == null) {
                         goalsDao.insertGoal(
 
                             Goals(
@@ -123,8 +147,20 @@ fun LoanScreen() {
                                 goal = goal.toDoubleOrNull() ?: 0.0
                             )
                         )
-                        goalsList = goalsDao.getAll()
+                    } else {
+                    goalsDao.updateGoal(
+                        Goals(
+                            id = editingGoal!!.id,
+                            title = title,
+                            current = current.toDoubleOrNull() ?: 0.0,
+                            goal = goal.toDoubleOrNull() ?: 0.0
 
+                        )
+                    )
+                }
+
+                        goalsList = goalsDao.getAll()
+                        editingGoal = null
                         title = ""
                         current = ""
                         goal = ""
@@ -132,7 +168,7 @@ fun LoanScreen() {
                     }
 
                 }) {
-                    Text("Add")
+                    Text(if (editingGoal == null) "Add" else "Update")
                 }
             },
 

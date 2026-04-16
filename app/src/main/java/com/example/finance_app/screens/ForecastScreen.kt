@@ -12,20 +12,79 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.finance_app.Spending
 import com.example.finance_app.components.SmallBalanceCards
 import com.example.finance_app.components.ForecastProjectionCard
 import com.example.finance_app.components.GoalsCard
 import com.example.finance_app.ui.theme.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.finance_app.spendingDao
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ForecastScreen() {
 
     var scrollState = rememberScrollState()
+    var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
 
+    var income by remember { mutableStateOf(0.0) }
+    var expenses by remember { mutableStateOf(0.0) }
+    var balance  by remember { mutableStateOf(0.0) }
+    var dailySpending by remember { mutableStateOf(0.0) }
+    var predictedBalance by remember { mutableStateOf(0.0) }
+    // runs when screen opens
+
+    // date logic
+
+    // current date
+    val currentDate = java.util.Calendar.getInstance()
+    // current day
+    val currentDay = currentDate.get(java.util.Calendar.DAY_OF_MONTH)
+    // total days
+    val maxDays = currentDate.getActualMaximum(java.util.Calendar.DAY_OF_MONTH)
+    // days left in month
+    val daysRemaining = maxDays - currentDay
+
+    LaunchedEffect(Unit) {
+
+        // all transactions from Room database
+
+        spendingList = spendingDao.getAll()
+
+        // calculating total income
+
+        income = spendingList.filter { it.category == "Income" }
+            .sumOf { it.amount }
+
+        // total expenses
+
+        expenses = spendingList.filter { it.category != "Income" }
+            .sumOf { it.amount }
+
+        // current balance
+
+        balance = income - expenses
+
+
+
+
+        // daily spending
+
+        dailySpending = expenses / 30
+
+        // predicted balance
+
+        predictedBalance = balance - (dailySpending * daysRemaining)
+
+
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +95,12 @@ fun ForecastScreen() {
 
             Text("Forecast")
             Spacer(modifier = Modifier.height(16.dp))
-            ForecastProjectionCard()
+            ForecastProjectionCard(
+                predictedBalance = predictedBalance,
+                endOfMonth = balance,
+                dailySpending = dailySpending,
+                daysRemaining = daysRemaining
+            )
 
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -49,8 +113,8 @@ fun ForecastScreen() {
             ) {
                 SmallBalanceCards(
                     title = "Current Balance",
-                    value = "$12,465",
-                    desc = "Day 13 of 30",
+                    value = "£${balance.toInt()}",
+                    desc = "Day $currentDay of $maxDays",
                     modifier = Modifier.width(170.dp),
                     status = "",
                     backgroundColor = Blue_Card
@@ -61,44 +125,20 @@ fun ForecastScreen() {
                 SmallBalanceCards(
 
                     title = "Average Spending ",
-                    value = "$12,465",
+                    value = "£${dailySpending.toInt()}",
                     desc = "per day",
                     modifier = Modifier.width(170.dp),
                     status = "",
                     backgroundColor = Purple_Card
-
-
                 )
-
-
             }
+
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
 
-            GoalsCard(
-                title = "Goal 1",
-                current = 200.0,
-                goal = 10000.0,
-                color = Card_Navy
 
-            )
-
-            GoalsCard(
-                title = "Goal 2",
-                current = 5000.0,
-                goal = 10000.0,
-                color = Card_Navy
-
-            )
-
-            GoalsCard(
-                title = "Goal 3",
-                current = 7800.0,
-                goal = 10000.0,
-                color = Card_Navy
-
-            )
         }
     }
 }

@@ -17,10 +17,16 @@ import androidx.compose.ui.unit.sp
 import com.example.finance_app.ui.theme.*
 
 
-@Preview
 @Composable
 
-fun ForecastProjectionCard() {
+fun ForecastProjectionCard(
+    predictedBalance: Double,
+    endOfMonth: Double,
+    dailySpending: Double,
+    daysRemaining: Int
+
+
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -42,10 +48,10 @@ fun ForecastProjectionCard() {
             SmallBalanceCards(
 
                 title = "Predicted Balance",
-                value = "$10,500",
+                value = "£${predictedBalance.toInt()}",
                 desc = "Based on current spending trends",
                 modifier = Modifier.fillMaxWidth(),
-                status = "End of March ",
+                status = "£${endOfMonth.toInt()}",
                 backgroundColor = Green_Card
 
             )
@@ -54,16 +60,13 @@ fun ForecastProjectionCard() {
 
             SmallBalanceCards(
                 title = "End of April",
-                value = "$11,500",
-                desc = "Daily Spending:$150.51/day ",
+                value = "£${endOfMonth.toInt()}",
+                desc = "Daily Spending: £${dailySpending.toInt()} ",
                 modifier = Modifier.fillMaxWidth(),
                 status = "",
                 backgroundColor = Purple_Card
 
             )
-
-
-
 
         }
 

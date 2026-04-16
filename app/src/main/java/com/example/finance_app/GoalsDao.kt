@@ -3,6 +3,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Delete
+import androidx.room.Update
 
 @Dao
 
@@ -20,4 +21,10 @@ interface GoalsDao {
     @Query("SELECT * FROM Goals where title LIKE :titleName")
     suspend fun findTitle(titleName: String): List<Goals>
 
+    @Update
+    suspend fun updateGoal(goals: Goals)
+
 }
+
+
+
