@@ -24,7 +24,13 @@ import com.example.finance_app.ui.theme.Card_Navy
 
 
 @Composable
-fun BalanceCard() {
+fun BalanceCard(
+    income: Double,
+    expenses: Double,
+    balance : Double,
+
+
+) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Card_Navy.copy(0.9f)),
@@ -38,6 +44,8 @@ fun BalanceCard() {
 // makes the card bigger
         Column(modifier = Modifier.padding(35.dp)){
 
+            // balance Text
+
             Text(
                 text = "Total Balance",
                 color = Color.LightGray,
@@ -46,7 +54,7 @@ fun BalanceCard() {
             )
 
             Text(
-                text = "$6,000.00",
+                text = "£${balance.toInt()}",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp
@@ -69,7 +77,7 @@ fun BalanceCard() {
                     Text(text = "Income", color = Color.Green, fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "$1,500", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    Text(text = "£${income.toInt()}", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
                 }
 
                 Spacer(modifier = Modifier.width(115.dp)) // space between easier to freely edit instead of weight or inbetweens
@@ -80,7 +88,7 @@ fun BalanceCard() {
 
                     Text(text = "Expense", color = Color.Red, fontSize = 11.sp)
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "$1,500", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    Text(text = "£${expenses.toInt()}", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
                 }
             }
 

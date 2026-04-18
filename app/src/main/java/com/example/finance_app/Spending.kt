@@ -15,8 +15,8 @@ data class Spending(
     val name: String?,
     val amount: Double,
     val date: String?,
-    val category: String?,
-    val description: String?
+    val category: String?
+
 
 
 

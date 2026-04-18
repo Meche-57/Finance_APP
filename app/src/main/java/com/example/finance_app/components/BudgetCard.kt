@@ -1,6 +1,7 @@
 package com.example.finance_app.components
 
 import android.R
+import android.provider.CalendarContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +34,23 @@ import com.example.finance_app.ui.theme.IncomeGreen
 import com.example.finance_app.ui.theme.Text_Grey
 
 @Composable
-fun BudgetCard() {
+fun BudgetCard(
+
+    remaining: Int,
+    daysRemaining:Int,
+    budget: Double,
+    expenses: Double,
+    status: String?,
+    month: String?
+
+) {
+
+    val progress = if (expenses > budget){1.0 }
+
+    else{ expenses/budget}
+
+    val percent = (progress * 100)
+
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Card_Navy.copy(0.9f)),
@@ -98,7 +115,7 @@ fun BudgetCard() {
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillMaxWidth(0.18f) // 18%
+                            .fillMaxWidth(0.30f) // 18%
                             .background(
                                 color = BudgetOrange,
                                 shape = RoundedCornerShape(10.dp)
@@ -107,10 +124,10 @@ fun BudgetCard() {
 
                     // The number inside the bar
                     Text(
-                        text = "18%",
+                        text = "${percent.toInt()}% Used",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
+                        fontSize = 11.sp,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -128,7 +145,7 @@ fun BudgetCard() {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = "Remaining", color = Color.LightGray, fontSize = 12.sp)
                     Text(
-                        text = "$1,108",
+                        text = "£$remaining",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
@@ -145,7 +162,7 @@ fun BudgetCard() {
 
                     Text(text = "Days Left", color = Color.LightGray, fontSize = 12.sp)
                     Text(
-                        text = "17",
+                        text = "$daysRemaining",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
@@ -162,7 +179,7 @@ fun BudgetCard() {
 
                     Text(text = "Monthly Budget", color = Color.LightGray, fontSize = 12.sp)
                     Text(
-                        text = "$4,892 / $6,000",
+                        text = "$budget",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
