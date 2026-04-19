@@ -69,6 +69,7 @@ fun HomeScreen() {
             .filter { it.category != "Income" }
             .sumOf { it.amount }
 
+
         balance = income - expenses
 
         budget = 550.0
@@ -131,8 +132,7 @@ fun HomeScreen() {
                         daysRemaining = daysRemaining,
                         budget = budget,
                         expenses = expenses,
-                        status = null,
-                        month = null
+
 
                     )
                     Recent_Activity()

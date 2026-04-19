@@ -23,18 +23,22 @@ import com.example.finance_app.ui.theme.Card_Navy
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Card
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.sp
+import com.example.finance_app.ui.theme.ExpenseRed
+import com.example.finance_app.ui.theme.IncomeGreen
+import com.example.finance_app.ui.theme.Text_White
 
 
 @Composable
 fun Recent_Activity() {
-
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
+
 
     LaunchedEffect(Unit) {
         spendingList = spendingDao.getAll()
     }
 
-    Text(text = "Recent Activity:")
+    Text(text = "Recent Activity")
 
     Card(modifier = Modifier
         .fillMaxWidth()
@@ -57,24 +61,33 @@ fun Recent_Activity() {
     spendingList.takeLast(3).reversed().forEach { item ->
 
         Column(modifier = Modifier.padding(12.dp)){
+            val spendingColour = if(item.category == "Income") {
+                IncomeGreen
+            } else {
+                ExpenseRed
+            }
 
 
         Row ( modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween) {
 
             Text(
-                text = " ${item.name} "
+                text = " ${item.name} ",
+                color = Text_White
             )
 
             Text(
-                text = " £${item.amount}"
+                text = if (item.category == "Income")
+                    " +£${item.amount}"
+                else " -£${item.amount}",
+
+                color = spendingColour
             )
         }
-
-
-
             Text(
-                text = " ${item.category}"
+                text = "${item.category}",
+                fontSize = 13.sp,
+                color = spendingColour
             )
 }
 

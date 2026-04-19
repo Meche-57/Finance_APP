@@ -1,7 +1,6 @@
 package com.example.finance_app.components
 
-import android.R
-import android.provider.CalendarContract
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,12 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.finance_app.ui.theme.Card_Navy
-import androidx.compose.material3.LinearProgressIndicator
 import com.example.finance_app.ui.theme.Back_Navy
-
 import com.example.finance_app.ui.theme.BudgetOrange
+import com.example.finance_app.ui.theme.BudgetYellow
+import com.example.finance_app.ui.theme.ExpenseRed
 import com.example.finance_app.ui.theme.IncomeGreen
-import com.example.finance_app.ui.theme.Text_Grey
+
 
 @Composable
 fun BudgetCard(
@@ -40,16 +39,38 @@ fun BudgetCard(
     daysRemaining:Int,
     budget: Double,
     expenses: Double,
-    status: String?,
-    month: String?
+
 
 ) {
-
     val progress = if (expenses > budget){1.0 }
-
     else{ expenses/budget}
 
     val percent = (progress * 100)
+    val currentDate = java.util.Calendar.getInstance()
+    val monthName = java.text.SimpleDateFormat("MMMM", java.util.Locale.getDefault()).format(currentDate.time)
+    val year = currentDate.get(java.util.Calendar.YEAR)
+
+
+    val progressColor = when {
+        progress >= 0.0f && progress < 0.5f -> IncomeGreen
+        progress >= 0.5f && progress < 0.75f -> BudgetYellow
+        progress >= 0.8f && progress < 0.9f -> BudgetOrange
+        else -> ExpenseRed
+    }
+
+    val progressText = when {
+        progress >= 0.0f && progress < 0.5f -> "On Track"
+        progress >= 0.5f && progress < 0.75f -> "Almost Full"
+        progress >= 0.8f && progress < 0.9f -> "Full"
+    else -> "Over Budget" }
+
+    val progressTextColour = when {
+        progress >= 0.0f && progress < 0.5f -> IncomeGreen
+        progress >= 0.5f && progress < 0.75f -> BudgetYellow
+        progress >= 0.8f && progress < 0.9f -> BudgetOrange
+        else -> ExpenseRed }
+
+
 
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -75,10 +96,10 @@ fun BudgetCard(
 
 
                     Text(
-                        text = "On Track",
-                        color = Color.Green,
+                        text = progressText,
+                        color = progressTextColour,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp
+                        fontSize = 12.sp
 
                     )
 
@@ -91,7 +112,7 @@ fun BudgetCard(
                     )
 
                     Text(
-                        text = "February 2026",
+                        text = "$monthName $year",
                         color = Color.LightGray,
                         fontWeight = FontWeight.Bold,
                         fontSize = 10.sp
@@ -115,9 +136,9 @@ fun BudgetCard(
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillMaxWidth(0.30f) // 18%
+                            .fillMaxWidth(progress.toFloat()) // 18%
                             .background(
-                                color = BudgetOrange,
+                                color = progressColor,
                                 shape = RoundedCornerShape(10.dp)
                             )
                     )
@@ -179,7 +200,7 @@ fun BudgetCard(
 
                     Text(text = "Monthly Budget", color = Color.LightGray, fontSize = 12.sp)
                     Text(
-                        text = "$budget",
+                        text = if (budget < 0 )  "-£${-budget}" else "£$budget",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
