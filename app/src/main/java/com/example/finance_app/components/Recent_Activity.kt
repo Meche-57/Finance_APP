@@ -58,7 +58,7 @@ fun Recent_Activity() {
 
 
 // reverse to see recent transactions first
-    spendingList.takeLast(3).reversed().forEach { item ->
+    spendingList.takeLast(8).reversed().forEach { item ->
 
         Column(modifier = Modifier.padding(12.dp)){
             val spendingColour = if(item.category == "Income") {

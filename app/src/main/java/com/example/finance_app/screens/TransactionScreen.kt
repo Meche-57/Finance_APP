@@ -1,5 +1,7 @@
 package com.example.finance_app.screens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.finance_app.Spending
 import com.example.finance_app.spendingDao
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextField
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
@@ -34,11 +39,22 @@ fun TransactionScreen() {
     var amount by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
-    var balance by remember { mutableStateOf("") }
+
 
     // Create an empty List
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
+    var isDropdownOpen by remember { mutableStateOf(false) }
 
+    val categories = listOf(
+        "Income",
+        "Food",
+        "Transport",
+        "Entertainment",
+        "Shopping",
+        "Electronics",
+        "Bills",
+        "Other"
+    )
 
     Column(modifier = Modifier.fillMaxSize()
         .verticalScroll(rememberScrollState())) {
@@ -87,13 +103,34 @@ fun TransactionScreen() {
                         )
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        TextField(
-                            value = category,
-                            onValueChange = { category = it },
-                            label = { Text("Category") }
-                        )
-                    }
-                },
+                        Box {
+                            Button(
+                                onClick = { isDropdownOpen = true },
+                                modifier = Modifier.fillMaxWidth()
+
+                            ){
+                                Text(text = if (category.isEmpty()) " Select Category" else category)
+                            }
+
+                            DropdownMenu(
+                                expanded = isDropdownOpen,
+                                onDismissRequest = { isDropdownOpen = false },
+                                modifier = Modifier.fillMaxWidth()
+
+                            ) {
+                                categories.forEach { item ->
+                                    DropdownMenuItem(
+                                        text = { Text(item) },
+                                        onClick = {
+                                            category = item
+                                            isDropdownOpen = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        }
+                    },
 
                 confirmButton = {
                     Button(onClick = {
