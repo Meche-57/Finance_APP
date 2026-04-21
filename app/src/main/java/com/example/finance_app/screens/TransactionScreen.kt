@@ -24,9 +24,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.finance_app.components.Charts
 
 @Preview
 @Composable
@@ -45,6 +47,8 @@ fun TransactionScreen() {
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
     var isDropdownOpen by remember { mutableStateOf(false) }
 
+    // List of categories
+
     val categories = listOf(
         "Income",
         "Food",
@@ -55,6 +59,10 @@ fun TransactionScreen() {
         "Bills",
         "Other"
     )
+    LaunchedEffect(Unit){
+        spendingList = spendingDao.getAll()
+    }
+
 
     Column(modifier = Modifier.fillMaxSize()
         .verticalScroll(rememberScrollState())) {
@@ -70,8 +78,19 @@ fun TransactionScreen() {
         Spacer(modifier = Modifier.height(10.dp))
 
 
+        val data = spendingList
+            .filter { it.category != "Income" }//
+            .groupBy { it.category }
+            .map { (_, spendingList) ->
+                spendingList.sumOf { it.amount }.toFloat()}
 
-        if (showDialog) {
+                Column {
+                    Text("Transactions")
+                        Charts(data,categories)
+                }}
+
+
+                if (showDialog) {
 
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -171,4 +190,4 @@ fun TransactionScreen() {
         }
 
 
-    }}
+    }
