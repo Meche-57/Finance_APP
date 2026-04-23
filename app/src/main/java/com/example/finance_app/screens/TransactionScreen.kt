@@ -1,10 +1,8 @@
 package com.example.finance_app.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +26,41 @@ import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.finance_app.components.BarChart
 import com.example.finance_app.components.Charts
+import android.app.DatePickerDialog
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.ui.platform.LocalContext
+import com.example.finance_app.ui.theme.Card_Navy
+import com.example.finance_app.ui.theme.Text_White
+import java.util.Calendar
+
+import androidx.compose.material3.TextFieldDefaults
+
+
+import androidx.compose.ui.text.style.TextAlign
+import com.example.finance_app.components.BalanceCard
+
+import com.example.finance_app.ui.theme.textField
+
 
 @Preview
 @Composable
 fun TransactionScreen() {
+
+    var income by remember { mutableStateOf(0.0) }
+    var expenses by remember { mutableStateOf(0.0) }
+    var balance by remember { mutableStateOf(0.0) }
 
 
     val scope = rememberCoroutineScope()
@@ -43,13 +71,26 @@ fun TransactionScreen() {
     var category by remember { mutableStateOf("") }
 
 
+
     // Create an empty List
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
     var isDropdownOpen by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth -> // _ = ignored unused parameters in kotlin lambds
+            date = "%02d/%02d/%04d".format(dayOfMonth, month + 1, year)
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
     // List of categories
 
-    val categories = listOf(
+    val dropdownCategories = listOf(
         "Income",
         "Food",
         "Transport",
@@ -61,133 +102,250 @@ fun TransactionScreen() {
     )
     LaunchedEffect(Unit){
         spendingList = spendingDao.getAll()
+
     }
 
 
-    Column(modifier = Modifier.fillMaxSize()
+
+
+    Column(modifier = Modifier.padding(15.dp)
         .verticalScroll(rememberScrollState())) {
 
-        Text(text = " Recent Transaction")
+        // income is category Income
+        income = spendingList
+            .filter { it.category == "Income" }
+            .sumOf { it.amount }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        expenses = spendingList
+            .filter { it.category != "Income" }
+            .sumOf { it.amount }
 
-        Button(onClick = { showDialog = true }) {
-            Text("Add Transaction")
+
+        balance = income - expenses
+
+        BalanceCard(
+            income = income,
+            expenses = expenses,
+            balance = balance
+
+
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        //Button to Add Transactions
+
+
+        Button(onClick = { showDialog = true },
+            shape = RoundedCornerShape(16.dp),
+            contentPadding = PaddingValues(10.dp),
+            modifier =  Modifier.fillMaxWidth()
+                .padding(6.dp))
+
+
+        {
+            Text(text = " Add Transaction",
+                textAlign = TextAlign.Left,
+                modifier = Modifier.padding(8.dp)
+               )
+
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                contentDescription = "Add Transaction",
+
+            )
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
+// Pie chart Data
+
+        val chartCategories = mutableListOf<String>()
+        val chartValues = mutableListOf<Float>()
 
         val data = spendingList
             .filter { it.category != "Income" }//
             .groupBy { it.category }
-            .map { (_, spendingList) ->
-                spendingList.sumOf { it.amount }.toFloat()}
 
-                Column {
-                    Text("Transactions")
-                        Charts(data,categories)
-                }}
+        for ((category, list) in data) {
+
+            chartCategories.add(category ?: "Other") // adds the category but if unknown add to other
+            chartValues.add(list.sumOf { it.amount }.toFloat()) // adds the amount of the category
+        }
+        Charts(chartValues, chartCategories)
 
 
-                if (showDialog) {
+        // Monthly BarChart
 
+        val monthLabels = listOf(
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul"
+        )
+
+        // Initialize a list of 7 zeros to store monthly totals
+        val monthlyTotals = MutableList(7) { 0f }
+
+        spendingList
+            .filter { it.category != "Income" }
+            .forEach { item ->
+                val parts = item.date?.split("/")  // splits the date format
+
+                if (parts != null && parts.size > 1){
+                    // -1 as months as months start at 1 but list at 0
+                    val month = parts[1].toInt() - 1
+
+                    if (month in 0..6){ //checks if the month is in the list
+                        monthlyTotals[month] += item.amount.toFloat() // adds the amount to the list
+                    }
+                }
+            }
+
+        BarChart(monthlyTotals, monthLabels)
+
+
+        if (showDialog) {
+
+            // Title of the Alert Box
             AlertDialog(
                 onDismissRequest = { showDialog = false },
                 title = { Text("Add Transaction") },
+                containerColor = Card_Navy,
+                textContentColor = Text_White,
+                titleContentColor = Text_White,
+
+
 
                 text = {
                     Column {
+
+                        // Name of Transaction
                         TextField(
                             value = name,
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = (textField)),
                             onValueChange = { name = it },
-                            label = { Text("Name") }
+                            label = { Text("Name")
+
+
+                            }
+
                         )
+
 
                         Spacer(modifier = Modifier.height(10.dp))
 
+
+                        // Amount of Transaction
                         TextField(
                             value = amount,
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = (textField)),
                             onValueChange = { amount = it },
                             label = { Text("Amount") },
 
                             )
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        TextField(
-                            value = date,
-                            onValueChange = { date = it },
-                            label = { Text("Date") }
+                        // Date picker
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { datePickerDialog.show() }
+                        ) {
+                            TextField(
 
-                        )
+                                value = date,
+
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text("Date") },
+                                enabled = false, // prevents typing
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = (textField))
+
+                            )
+                        }
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        Box {
-                            Button(
-                                onClick = { isDropdownOpen = true },
-                                modifier = Modifier.fillMaxWidth()
+                        // Dropdown Menu for Categories
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { isDropdownOpen = true }
 
-                            ){
-                                Text(text = if (category.isEmpty()) " Select Category" else category)
+                        ) {
+                            TextField(
+                                value = category,
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text("Category") },
+                                enabled = false, // prevents typing
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = (textField))
+
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = isDropdownOpen,
+                            onDismissRequest = { isDropdownOpen = false },
+                            containerColor = textField
+
+                        ) {
+                            //Goes thought the dropdown categories and adds them to the dropdown
+                            dropdownCategories.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(item) },
+                                    onClick = {
+                                        category = item
+                                        isDropdownOpen = false
+                                    }
+                                )
                             }
+                        }
+                    }
+                },
 
-                            DropdownMenu(
-                                expanded = isDropdownOpen,
-                                onDismissRequest = { isDropdownOpen = false },
-                                modifier = Modifier.fillMaxWidth()
+                        confirmButton = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
 
                             ) {
-                                categories.forEach { item ->
-                                    DropdownMenuItem(
-                                        text = { Text(item) },
-                                        onClick = {
-                                            category = item
-                                            isDropdownOpen = false
-                                        }
-                                    )
+                                Button(onClick = { showDialog = false }) {
+                                    Text(text = "Cancel")
                                 }
-                            }
-                        }
-                        }
-                    },
+                                Button(onClick = {
+                                    scope.launch {
+                                        spendingDao.insertSpending( // Adds it to the spending Database
 
-                confirmButton = {
-                    Button(onClick = {
-                        scope.launch {
-                            spendingDao.insertSpending(
+                                            Spending(
+                                                name = name,
+                                                amount = amount.toDoubleOrNull()
+                                                    ?: 0.0, // Handle null case
+                                                date = date,
+                                                category = category
 
-                                Spending(
-                                    name = name,
-                                    amount = amount.toDoubleOrNull() ?: 0.0, // Handle null case
-                                    date = date,
-                                    category = category
+                                            )
+                                        )
+                                        //reload data
 
-                                )
-                            )
-                            //reload data
+                                        spendingList = spendingDao.getAll()
 
-                            spendingList = spendingDao.getAll()
+                                        // clear input
 
-                            // clear input
-
-                            name = ""
-                            amount = ""
-                            date = ""
-                            category = ""
-                            showDialog = false
+                                        name = ""
+                                        amount = ""
+                                        date = ""
+                                        category = ""
+                                        showDialog = false
 
 
-                        }
-                    })
-                    { Text(text = "Add Transaction") }
-                },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text(text = "Cancel")
-                    }
-                }
-            )
-        }
+                                    }
+                                }) {
+                                    Text("Done")
 
 
-    }
+                                }}})}}}

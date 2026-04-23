@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 val Green_Card = Color(0xFF0F6849)
 val Purple_Card = Color(0xFF32276A)
 val Blue_Card = Color(0xFF092546)
+val textField = Color(0xFFA0A2B4)
  //  Palette for text
 
  val IncomeGreen = Color(0xFF4CAF50)
