@@ -2,6 +2,7 @@ package com.example.finance_app.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import com.example.finance_app.ui.theme.BudgetOrange
 import com.example.finance_app.ui.theme.BudgetYellow
 import com.example.finance_app.ui.theme.ExpenseRed
 import com.example.finance_app.ui.theme.IncomeGreen
+import com.example.finance_app.ui.theme.Text_Grey
 
 
 @Composable
@@ -39,36 +41,55 @@ fun BudgetCard(
     daysRemaining:Int,
     budget: Double,
     expenses: Double,
+    editClick: () -> Unit
 
 
 ) {
-    val progress = if (expenses > budget){1.0 }
-    else{ expenses/budget}
+
+    val progress = if (budget <=  0) {
+        0.0 // progress 0 when budget is 0
+    } else {
+        expenses / budget // progress cal
+    }
+
 
     val percent = (progress * 100)
-    val currentDate = java.util.Calendar.getInstance()
-    val monthName = java.text.SimpleDateFormat("MMMM", java.util.Locale.getDefault()).format(currentDate.time)
-    val year = currentDate.get(java.util.Calendar.YEAR)
 
-
+// Progress bar colour
     val progressColor = when {
+        budget <= 0 -> Text_Grey
+        progress >= 0.0f && progress < 0.5f -> IncomeGreen
+        progress >= 0.5f && progress < 0.79f -> BudgetYellow
+        progress >= 0.8f && progress < 0.9f -> BudgetOrange
+        else -> ExpenseRed
+    }
+// Progress Text
+    val progressText = when {
+        budget <= 0 -> "No Budget Set" // If no budget is set
+        progress >= 0.0f && progress < 0.5f -> "On Track"
+        progress >= 0.5f && progress < 0.75f -> "Almost Full"
+        progress >= 0.8f && progress < 0.9f -> "Full"
+        else -> "Over Budget"
+    }
+
+    val progressTextColour = when {
+        budget <= 0 -> Text_Grey
         progress >= 0.0f && progress < 0.5f -> IncomeGreen
         progress >= 0.5f && progress < 0.75f -> BudgetYellow
         progress >= 0.8f && progress < 0.9f -> BudgetOrange
         else -> ExpenseRed
     }
 
-    val progressText = when {
-        progress >= 0.0f && progress < 0.5f -> "On Track"
-        progress >= 0.5f && progress < 0.75f -> "Almost Full"
-        progress >= 0.8f && progress < 0.9f -> "Full"
-    else -> "Over Budget" }
 
-    val progressTextColour = when {
-        progress >= 0.0f && progress < 0.5f -> IncomeGreen
-        progress >= 0.5f && progress < 0.75f -> BudgetYellow
-        progress >= 0.8f && progress < 0.9f -> BudgetOrange
-        else -> ExpenseRed }
+
+// Dates
+    val currentDate = java.util.Calendar.getInstance()
+    val monthName =
+        java.text.SimpleDateFormat("MMMM", java.util.Locale.getDefault()).format(currentDate.time)
+
+    val year = currentDate.get(java.util.Calendar.YEAR)
+
+
 
 
 
@@ -78,141 +99,150 @@ fun BudgetCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp)
-            .padding(top = 5.dp) // top part of the card
+
 
     ) {
 // makes the card bigger
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(modifier = Modifier.padding(25.dp)) {
             //add a row to have the status and bar onto the same row
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Column(modifier = Modifier.weight(1f)) {
+
+                Text(
+                    text = progressText,
+                    color = progressTextColour,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
+
+                )
+
+                Text(
+                    text = "Edit",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    modifier = Modifier.clickable{editClick()}
+                ) }
+
+
+            Text(
+                text = "Budget Status",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+
+            Text(
+                text = "$monthName $year",
+                color = Color.LightGray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp
+            )
 
 
 
-                    Text(
-                        text = progressText,
-                        color = progressTextColour,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
+        // The progress bar ()
+            Spacer(modifier = Modifier.height(10.dp))
 
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(35.dp)
+                .background(
+                    color = Back_Navy,
+                    shape = RoundedCornerShape(10.dp)
+                ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+
+            // color in the bar
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(progress.toFloat())
+                    .fillMaxHeight()
+                    .background(
+                        color = progressColor,
+                        shape = RoundedCornerShape(10.dp)
                     )
+            )
 
+            // The number inside the bar
+            Text(
+                text = "${percent.toInt()}% Used",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 11.sp,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
 
-                    Text(
-                        text = "Budget Status",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-
-                    Text(
-                        text = "$monthName $year",
-                        color = Color.LightGray,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp
-                    )
-
-
-                }
-                // The progress bar ()
-
-                Box(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(35.dp)
-                        .background(
-                            color = Back_Navy,
-                            shape = RoundedCornerShape(10.dp)),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-
-                    // color in the bar
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth(progress.toFloat()) // 18%
-                            .background(
-                                color = progressColor,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                    )
-
-                    // The number inside the bar
-                    Text(
-                        text = "${percent.toInt()}% Used",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 11.sp,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(10.dp))
 
 // row below
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
 
 
-            ) {
-                //Remaining
-                Column {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "Remaining", color = Color.LightGray, fontSize = 12.sp)
-                    Text(
-                        text = "£$remaining",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(25.dp))
-
-
-                Column(horizontalAlignment = Alignment.Start) {
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    // Days Left
-
-                    Text(text = "Days Left", color = Color.LightGray, fontSize = 12.sp)
-                    Text(
-                        text = "$daysRemaining",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(20.dp))
-
-
-                Column(horizontalAlignment = Alignment.Start) {
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    // Monthly Budget
-
-                    Text(text = "Monthly Budget", color = Color.LightGray, fontSize = 12.sp)
-                    Text(
-                        text = if (budget < 0 )  "-£${-budget}" else "£$budget",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
+        ) {
+            //Remaining
+            Column {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = "Remaining", color = Color.LightGray, fontSize = 12.sp)
+                Text(
+                    text = "£$remaining",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
             }
 
-            //
+            Spacer(modifier = Modifier.width(25.dp))
 
 
+            Column(horizontalAlignment = Alignment.Start) {
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Days Left
+
+                Text(text = "Days Left", color = Color.LightGray, fontSize = 12.sp)
+                Text(
+                    text = "$daysRemaining",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+
+            Column(horizontalAlignment = Alignment.Start) {
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Monthly Budget
+
+                Text(text = "Monthly Budget", color = Color.LightGray, fontSize = 12.sp)
+                Text(
+                    text = if (budget < 0) "-£${-budget}" else "£$budget",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            }
         }
+
+        //
+
+    }
     }}
+
 
 
 

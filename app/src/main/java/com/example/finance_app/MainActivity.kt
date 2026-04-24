@@ -15,10 +15,12 @@ import androidx.room.Room
 import com.example.finance_app.screens.HomeScreen
 import com.example.finance_app.ui.theme.Finance_APPTheme
 
-
+lateinit var budgetDao: BudgetDao
 lateinit var spendingDao: SpendingDao
 lateinit var goalsDao: GoalsDao
 lateinit var db: AppDatabase
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -32,6 +34,9 @@ class MainActivity : ComponentActivity() {
             .build()
         spendingDao = db.spendingDao()
         goalsDao = db.goalsDao()
+        budgetDao = db.budgetDao()
+
+
 
 
 

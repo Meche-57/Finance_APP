@@ -5,10 +5,12 @@ import androidx.room.RoomDatabase
 
 // database
 
-@Database(entities = [Spending::class, Goals::class], version = 2) // update version changes
+@Database(entities = [Spending::class, Goals::class , Budget::class],  version = 3) // update version changes
 abstract class AppDatabase: RoomDatabase(){
     abstract fun spendingDao(): SpendingDao
     abstract fun goalsDao(): GoalsDao
+    abstract fun budgetDao(): BudgetDao
+
 }
 
 

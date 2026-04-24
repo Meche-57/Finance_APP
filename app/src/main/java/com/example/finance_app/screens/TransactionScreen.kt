@@ -29,10 +29,12 @@ import androidx.compose.runtime.setValue
 import com.example.finance_app.components.BarChart
 import com.example.finance_app.components.Charts
 import android.app.DatePickerDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,16 +42,22 @@ import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.LocalContext
 import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.ui.theme.Text_White
 import java.util.Calendar
 
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.example.finance_app.components.BalanceCard
+import com.example.finance_app.ui.theme.Back_Navy
+import com.example.finance_app.ui.theme.Box_Navy
 
 import com.example.finance_app.ui.theme.textField
 
@@ -100,7 +108,25 @@ fun TransactionScreen() {
         "Bills",
         "Other"
     )
-    LaunchedEffect(Unit){
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Back_Navy
+    ){
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(155.dp)
+                .background(Box_Navy),
+            contentAlignment = Alignment.TopStart
+        ) {
+
+        }
+
+        LaunchedEffect(Unit){
         spendingList = spendingDao.getAll()
 
     }
@@ -348,4 +374,4 @@ fun TransactionScreen() {
                                     Text("Done")
 
 
-                                }}})}}}
+                                }}})}}}}}

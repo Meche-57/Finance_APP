@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.finance_app.Goals
 
 
 import com.example.finance_app.components.BalanceCard
@@ -46,6 +51,9 @@ fun HomeScreen() {
     var remaining by remember { mutableStateOf(0) }
     var budget by remember { mutableStateOf(0.0) }
 
+    var showBudgetDialog by remember { mutableStateOf(false) }
+    var budgetInput by remember { mutableStateOf("") }
+
 
 
     // val cannot change
@@ -53,7 +61,6 @@ fun HomeScreen() {
     val currentDay = currentDate.get(java.util.Calendar.DAY_OF_MONTH)
     val maxDays = currentDate.getActualMaximum(java.util.Calendar.DAY_OF_MONTH)
     val daysRemaining = maxDays - currentDay
-    val scrollState = rememberScrollState()
 
 
     LaunchedEffect(Unit) {
@@ -72,28 +79,32 @@ fun HomeScreen() {
 
         balance = income - expenses
 
-        budget = 550.0
-        remaining = (budget - expenses).toInt()
+// remaining should dbe 0 when budget is not set
+        remaining = if (budget <= 0) {
+            0
+        } else {
+            (budget - expenses).toInt()
 
+        }
     }
-
-
 
         Surface(
             modifier = Modifier
                 .fillMaxSize(),
             color = Back_Navy // background colour
 
-
         ) {
 
-            // This is the box at the top of the screen
+            //Add Column to make Header box scrollable
+            Column(
+                modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState()))
+            {
 
-            Box(modifier = Modifier.fillMaxSize()) {
-
+                // Top Header Box
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .height(155.dp)
                         .background(Box_Navy),
                     contentAlignment = Alignment.TopStart
@@ -108,14 +119,11 @@ fun HomeScreen() {
 
                     )
                 }
-
                 //Positions of the cards
                 Column(
                     modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .verticalScroll(scrollState)
-                        .padding(top = 95.dp) // Adjust this value to control the overlap
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20.dp)
+                        .offset(y = (-60).dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     BalanceCard(
@@ -132,9 +140,48 @@ fun HomeScreen() {
                         daysRemaining = daysRemaining,
                         budget = budget,
                         expenses = expenses,
+                       editClick = { budgetInput = budget.toString(); showBudgetDialog = true }
 
 
                     )
+
+                    if (showBudgetDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showBudgetDialog = false },
+                            title = { Text("Edit Budget") },
+                            text = {
+                                TextField(
+                                    value = budgetInput,
+                                    onValueChange = { budgetInput = it },
+                                    label = { Text("New Budget") }
+
+
+                                )
+                            },
+
+                            confirmButton = {
+                                Button(onClick = {
+                                    budget = budgetInput.toDoubleOrNull() ?: 0.0
+                                    remaining = (budget - expenses).toInt()
+                                    showBudgetDialog = false
+                                }) {
+                                    Text("Save")
+
+
+                                }
+
+                            },
+                            dismissButton = {
+                                Button(onClick = { showBudgetDialog = false }) {
+                                    Text("Cancel")
+                                }
+                            }
+
+
+
+                        )
+                    }
+
                     Recent_Activity()
 
 
@@ -149,4 +196,5 @@ fun HomeScreen() {
 @Preview(showBackground = true)
 fun PreviewHomeScreen() {
     HomeScreen()
+
 }
