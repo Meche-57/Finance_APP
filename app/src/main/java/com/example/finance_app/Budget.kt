@@ -9,6 +9,6 @@ data class Budget(
 
     @PrimaryKey(autoGenerate = true) var id: Int = 1,
 
-    val goal: Double
+    val budgetGoal: Double
 
     )

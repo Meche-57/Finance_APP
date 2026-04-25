@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 
 import androidx.compose.material3.Icon
+import com.example.finance_app.screens.ChatBotScreen
 import com.example.finance_app.screens.ForecastScreen
 import com.example.finance_app.screens.LoanScreen
 
@@ -64,6 +65,13 @@ fun Nav_bar(navController: NavHostController) {
                     label = { Text("Loan") }
                 )
 
+                NavigationBarItem(
+                    icon = {Icon(Icons.Filled.DateRange, contentDescription = "Chat")},
+                    selected = false,
+                    onClick = { navController.navigate("Chat") },
+                    label = { Text("Chat") }
+                )
+
 
 
 
@@ -86,6 +94,8 @@ fun Nav_bar(navController: NavHostController) {
             composable("transaction") { TransactionScreen() }
             composable("Forecast") { ForecastScreen() }
             composable("Loan") { LoanScreen() }
+            composable("Chat") { ChatBotScreen() }
+
         }
     }
 }

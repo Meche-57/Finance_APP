@@ -80,8 +80,7 @@ fun Recent_Activity() {
     Text(text = "Recent Activity")
 
     Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp),
+        .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Card_Navy)){
 
 

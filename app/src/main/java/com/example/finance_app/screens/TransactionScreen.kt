@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,6 +56,7 @@ import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.finance_app.budgetDao
 import com.example.finance_app.components.BalanceCard
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
@@ -113,6 +115,10 @@ fun TransactionScreen() {
         modifier = Modifier.fillMaxSize(),
         color = Back_Navy
     ){
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ){
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -129,13 +135,8 @@ fun TransactionScreen() {
         LaunchedEffect(Unit){
         spendingList = spendingDao.getAll()
 
+
     }
-
-
-
-
-    Column(modifier = Modifier.padding(15.dp)
-        .verticalScroll(rememberScrollState())) {
 
         // income is category Income
         income = spendingList
@@ -149,6 +150,14 @@ fun TransactionScreen() {
 
         balance = income - expenses
 
+        //Positions of the cards
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 15.dp)
+                .padding(top = 70.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ){
+
         BalanceCard(
             income = income,
             expenses = expenses,
@@ -156,15 +165,9 @@ fun TransactionScreen() {
 
 
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         //Button to Add Transactions
-
-
         Button(onClick = { showDialog = true },
             shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(10.dp),
             modifier =  Modifier.fillMaxWidth()
                 .padding(6.dp))
 
@@ -172,7 +175,7 @@ fun TransactionScreen() {
         {
             Text(text = " Add Transaction",
                 textAlign = TextAlign.Left,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(18.dp)
                )
 
             Icon(
@@ -181,8 +184,6 @@ fun TransactionScreen() {
 
             )
         }
-
-        Spacer(modifier = Modifier.height(4.dp))
 
 // Pie chart Data
 
@@ -201,7 +202,8 @@ fun TransactionScreen() {
         Charts(chartValues, chartCategories)
 
 
-        // Monthly BarChart
+
+            // Monthly BarChart
 
         val monthLabels = listOf(
             "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -374,4 +376,4 @@ fun TransactionScreen() {
                                     Text("Done")
 
 
-                                }}})}}}}}
+                                }}})}}}}}}

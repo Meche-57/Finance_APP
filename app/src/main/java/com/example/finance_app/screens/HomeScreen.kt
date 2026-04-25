@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.example.finance_app.Budget
 import com.example.finance_app.Goals
 
 
@@ -37,7 +39,8 @@ import com.example.finance_app.spendingDao
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
 import com.example.finance_app.Spending
-
+import com.example.finance_app.budgetDao
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -53,7 +56,10 @@ fun HomeScreen() {
 
     var showBudgetDialog by remember { mutableStateOf(false) }
     var budgetInput by remember { mutableStateOf("") }
+    var budgetList by remember { mutableStateOf(emptyList<Budget>()) }
 
+
+    val scope = rememberCoroutineScope()
 
 
     // val cannot change
@@ -65,6 +71,7 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) {
 
+        budgetList = budgetDao.getAll()
         spendingList = spendingDao.getAll()
 
         // income is category Income
@@ -75,6 +82,8 @@ fun HomeScreen() {
         expenses = spendingList
             .filter { it.category != "Income" }
             .sumOf { it.amount }
+
+        budget = budgetList.firstOrNull()?.budgetGoal ?: 0.0
 
 
         balance = income - expenses
@@ -123,7 +132,7 @@ fun HomeScreen() {
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
-                        .offset(y = (-60).dp),
+                        .offset(y = (-35).dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     BalanceCard(
@@ -161,13 +170,20 @@ fun HomeScreen() {
 
                             confirmButton = {
                                 Button(onClick = {
-                                    budget = budgetInput.toDoubleOrNull() ?: 0.0
-                                    remaining = (budget - expenses).toInt()
-                                    showBudgetDialog = false
-                                }) {
+                                    scope.launch {
+                                        val newBudget = budgetInput.toDoubleOrNull() ?: 0.0
+                                        budgetDao.insertBudget(Budget(budgetGoal = newBudget))
+                                        budget = newBudget
+                                        remaining = if (budget <= 0) {
+                                            0
+                                        } else {
+                                            (budget - expenses).toInt()
+                                        }
+                                        showBudgetDialog = false
+
+
+                                    }}) {
                                     Text("Save")
-
-
                                 }
 
                             },

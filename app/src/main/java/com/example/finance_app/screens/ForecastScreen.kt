@@ -95,6 +95,8 @@ fun ForecastScreen() {
 
             Text("Forecast")
             Spacer(modifier = Modifier.height(16.dp))
+
+
             ForecastProjectionCard(
                 predictedBalance = predictedBalance,
                 endOfMonth = balance,

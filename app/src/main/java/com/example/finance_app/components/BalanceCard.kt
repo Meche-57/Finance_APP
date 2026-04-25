@@ -47,12 +47,11 @@ fun BalanceCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp)
-            .padding(top = 25.dp)
+
 
     ){
 // makes the card bigger
-        Column(modifier = Modifier.padding(40.dp)) {
+        Column(modifier = Modifier.padding(38.dp)) {
 
             // balance Text
 

@@ -103,7 +103,7 @@ fun BudgetCard(
 
     ) {
 // makes the card bigger
-        Column(modifier = Modifier.padding(25.dp)) {
+        Column(modifier = Modifier.padding(22.dp)) {
             //add a row to have the status and bar onto the same row
 
             Row(
