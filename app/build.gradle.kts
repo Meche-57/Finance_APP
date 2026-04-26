@@ -6,6 +6,8 @@ plugins {
     // enable ksp
 
     id("com.google.devtools.ksp")
+    // Add the dependency for the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -79,8 +81,22 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
+
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
+
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation("com.google.firebase:firebase-analytics")
+
+    // Add the dependency for the Firebase AI Logic library When using the BoM,
+    // you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-ai")
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
 
 
 }

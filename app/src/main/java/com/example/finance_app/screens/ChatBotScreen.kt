@@ -33,7 +33,7 @@ fun ChatBotScreen(){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
@@ -59,8 +59,8 @@ Column(
 
                 Button(onClick = {
                     if (userInput.isNotBlank()) {
-                       val reply = "Bot: I will analyse your finances soon"
-                       messages = messages + reply
+                        messages = messages + "You: $userInput"
+                       messages = messages + "Bot: I will analyse your finances soon"
                         userInput = ""
                     }
                 }) {
