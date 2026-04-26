@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -27,6 +28,8 @@ fun ChatBotScreen(){
     var userInput by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(emptyList<String>()) }
 
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,12 +47,26 @@ Column(
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
+
             Row{
          TextField(
              value = userInput,
              onValueChange = { userInput = it},
              label = { Text("Type your message here") }
+
+
          )
+
+                Button(onClick = {
+                    if (userInput.isNotBlank()) {
+                       val reply = "Bot: I will analyse your finances soon"
+                       messages = messages + reply
+                        userInput = ""
+                    }
+                }) {
+                    Text("Send")
+                    }
+                }
      }
 
-}}}
+}}
