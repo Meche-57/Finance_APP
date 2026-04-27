@@ -16,17 +16,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.finance_app.components.GeminiAI
+import kotlinx.coroutines.launch
 
-@Preview(showBackground = true, showSystemUi = true)
+
 @Composable
 
 fun ChatBotScreen(){
 
     var userInput by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(emptyList<String>()) }
+    val scope = rememberCoroutineScope()
 
 
 
@@ -58,10 +62,17 @@ Column(
          )
 
                 Button(onClick = {
-                    if (userInput.isNotBlank()) {
+
+                    if (userInput.isNotBlank()){
+                        val question = userInput
+
                         messages = messages + "You: $userInput"
-                       messages = messages + "Bot: I will analyse your finances soon"
                         userInput = ""
+                    }
+                    scope.launch{
+                        val reply = GeminiAI.askGemini(userInput)
+                        messages = messages + "Bot:$reply"
+
                     }
                 }) {
                     Text("Send")

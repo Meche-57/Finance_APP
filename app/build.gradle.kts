@@ -44,9 +44,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
 
 }
 
@@ -62,9 +59,10 @@ dependencies {
     implementation(libs.androidx.material3)
 
 
+
     // navigation component
-    val nav_version = "2.9.7"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    val navVersion = "2.9.8"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 
 
     testImplementation(libs.junit)
@@ -75,12 +73,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
+    val roomVersion = "2.7.2"
+    implementation("androidx.room:room-runtime:$roomVersion")
 // use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$roomVersion")
 // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.room:room-ktx:$roomVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
 
 
