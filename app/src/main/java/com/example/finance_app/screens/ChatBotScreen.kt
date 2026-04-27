@@ -26,7 +26,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 
-fun ChatBotScreen(){
+fun ChatBotScreen(
+    income: Double,
+    expenses: Double,
+    budget: Double,
+    goals: Double,
+    remainingBudget: Double,
+    balance: Double,
+    predictedSpending: Double,
+    predictedAmount: Double,
+    dailySpending: Double
+
+){
 
     var userInput by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(emptyList<String>()) }
@@ -63,16 +74,43 @@ Column(
 
                 Button(onClick = {
 
-                    if (userInput.isNotBlank()){
+                    if (userInput.isNotBlank()) {
                         val question = userInput
-
-                        messages = messages + "You: $userInput"
+                        messages = messages + "You: $question"
                         userInput = ""
-                    }
-                    scope.launch{
-                        val reply = GeminiAI.askGemini(userInput)
-                        messages = messages + "Bot:$reply"
 
+                        scope.launch {
+                            // Set prompt for the AI on what to respond to
+                            val prompt = """
+                        
+                        You are FinanApp ChatBot, a personal finance assistant. 
+                        Here is the user's financial data: 
+                        
+                        - income : $income
+                        -expenses : $expenses
+                        -budget : $budget
+                        -goals : $goals
+                        -remainingBudget : $remainingBudget
+                        -balance : $balance
+                        -predictedSpending : $predictedSpending
+                        -predictedAmount : $predictedAmount
+                        -dailySpending : $dailySpending
+                        
+                       Rules:
+                       - Only answer finance related questions
+                       - Use data from above when responding
+                       - If not related say: 
+                        "I'm sorry, I can only assist with finance-related questions."
+                        - Keep answers short and helpful
+                        - Give practical advice when possible
+                        
+                        User Question: $question 
+                        """.trimIndent()
+
+                            val reply = GeminiAI.askGemini(prompt)
+                            messages = messages + "Bot:$reply"
+
+                        }
                     }
                 }) {
                     Text("Send")
