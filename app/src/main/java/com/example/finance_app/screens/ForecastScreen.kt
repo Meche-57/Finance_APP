@@ -21,11 +21,13 @@ import androidx.compose.ui.unit.dp
 import com.example.finance_app.Spending
 import com.example.finance_app.components.SmallBalanceCards
 import com.example.finance_app.components.ForecastProjectionCard
-import com.example.finance_app.components.GoalsCard
 import com.example.finance_app.ui.theme.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.finance_app.components.AIRecommendCard
+import com.example.finance_app.components.GeminiAI
 import com.example.finance_app.spendingDao
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -33,6 +35,7 @@ fun ForecastScreen() {
 
     var scrollState = rememberScrollState()
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
+    var aiSuggestion by remember { mutableStateOf("Loading Advice") }
 
     var income by remember { mutableStateOf(0.0) }
     var expenses by remember { mutableStateOf(0.0) }
@@ -82,6 +85,38 @@ fun ForecastScreen() {
         // predicted balance
 
         predictedBalance = balance - (dailySpending * daysRemaining)
+
+
+            // Set prompt for the AI on what to respond to
+            val prompt = """
+                        
+                        You are FinanApp ChatBot, a personal finance assistant. 
+                        Here is the user's financial data: 
+                        
+                        - income : $income
+                        -expenses : $expenses
+                        -balance : $balance
+                        -daily spending : $dailySpending
+                        -predicted balance : $predictedBalance
+                        -days remaining : $daysRemaining
+                        -current day : $currentDay
+                        -max days : $maxDays
+                       
+                      
+                     
+                       Rules:
+                       - Only answer finance related questions
+                       - Use data from above when responding
+                       - If not related say: 
+                        "I'm sorry, I can only assist with finance-related questions."
+                        - Keep answers short and helpful
+                        - Give practical advice when possible
+                        - Only give advice not more help 
+                        
+         
+                        """.trimIndent()
+
+        aiSuggestion = GeminiAI.askGemini(prompt)
 
 
     }
@@ -134,6 +169,12 @@ fun ForecastScreen() {
                     backgroundColor = Purple_Card
                 )
             }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+
+
+            AIRecommendCard(aiSuggestion)
 
 
 

@@ -73,11 +73,6 @@ fun Nav_bar(navController: NavHostController) {
                 )
 
 
-
-
-
-
-
             }
         }
 
