@@ -1,9 +1,4 @@
 package com.example.finance_app.components
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Center
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.finance_app.ui.theme.Box_Navy
 import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.ui.theme.Text_White
+import kotlin.math.pow
 
 
 @Composable
@@ -37,6 +32,20 @@ fun LoanCalculator() {
     var amount by remember { mutableStateOf("") }
     var interest by remember { mutableStateOf("") }
     var term by remember { mutableStateOf("") }
+
+
+    val LoanAmount = amount.toDoubleOrNull() ?: 0.0
+    val InterestRate = (interest.toDoubleOrNull() ?: 0.0)/ 100 / 12   //100 turns to decimal 12 is months
+    val LoanTerm = (term.toDoubleOrNull() ?: 0.0) * 12  // number of payments
+
+    val monthly = if (LoanAmount == 0.0 || LoanTerm == 0.0) {
+        0.0
+    } else if (InterestRate == 0.0){
+        LoanAmount/ LoanTerm
+    } else{
+        LoanAmount * InterestRate / (1-(1+InterestRate).pow(-LoanTerm))
+    }
+    val totalRepayments = monthly * LoanTerm
 
 
     Card(
@@ -64,13 +73,13 @@ fun LoanCalculator() {
                 )
                 FinanceInput(
                     value = interest,
-                    onValueChange = {},
+                    onValueChange = {interest = it},
                     label = "Interest Rate"
                 )
                 FinanceInput(
                     value = term,
-                    onValueChange = {},
-                    label = "Loan Term"
+                    onValueChange = { term = it },
+                    label = "Loan Term (Years)"
 
                 )
             }
@@ -110,7 +119,7 @@ fun LoanCalculator() {
                         )
 
                         Text(
-                            text = "$2,500"
+                            text = "£%.2f".format(monthly)
                         )
 
                         Spacer(modifier = Modifier.padding(8.dp))
@@ -122,7 +131,7 @@ fun LoanCalculator() {
                         )
 
                         Text(
-                            text = "$10,000",
+                            text = "£%.2f".format(totalRepayments),
                             color = Text_White
                         )
 
