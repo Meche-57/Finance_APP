@@ -1,5 +1,6 @@
 package com.example.finance_app.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,36 +13,60 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.finance_app.AppDatabase
+import com.example.finance_app.budgetDao
 import com.example.finance_app.components.GeminiAI
+import com.example.finance_app.goalsDao
+import com.example.finance_app.spendingDao
 import kotlinx.coroutines.launch
 
 
 @Composable
 
-fun ChatBotScreen(
-    income: Double,
-    expenses: Double,
-    budget: Double,
-    goals: Double,
-    remainingBudget: Double,
-    balance: Double,
-    predictedSpending: Double,
-    predictedAmount: Double,
-    dailySpending: Double
+fun ChatBotScreen(){
 
-){
+    var budget by remember { mutableStateOf(0.0) }
+    var remainingBudget by remember { mutableStateOf(0.0) }
+    var goals by remember { mutableStateOf(0.0) }
+
+    var income by remember { mutableStateOf(0.0) }
+    var expenses by remember { mutableStateOf(0.0) }
+    var balance by remember { mutableStateOf(0.0) }
 
     var userInput by remember { mutableStateOf("") }
-    var messages by remember { mutableStateOf(emptyList<String>()) }
+    var messages by remember { mutableStateOf(listOf<String>()) }
+    var isLoading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+
+
+    LaunchedEffect(Unit) {
+        val spendingList = spendingDao.getAll()
+        val goalsList = goalsDao.getAll()
+        val budgetList = budgetDao.getAll()
+
+
+        income = spendingList.filter { it.category == "Income" }
+            .sumOf { it.amount }
+        expenses = spendingList.filter { it.category!= "Income" }
+            .sumOf { it.amount }
+        balance = income - expenses
+
+
+        budget = budgetList.firstOrNull()?.budgetGoal ?: 0.0
+
+        goals = goalsList.sumOf{ it.current}
+        remainingBudget = budget - expenses
+
+        }
 
 
 
@@ -61,7 +86,10 @@ Column(
         Text(text = it)
         Spacer(modifier = Modifier.height(8.dp))
     }
-}
+    if (isLoading) {
+        Text(text = "FinanBot is analysing...")
+    }
+
 
             Row{
          TextField(
@@ -78,6 +106,8 @@ Column(
                         val question = userInput
                         messages = messages + "You: $question"
                         userInput = ""
+                        isLoading = true
+
 
                         scope.launch {
                             // Set prompt for the AI on what to respond to
@@ -88,13 +118,8 @@ Column(
                         
                         - income : $income
                         -expenses : $expenses
-                        -budget : $budget
-                        -goals : $goals
-                        -remainingBudget : $remainingBudget
                         -balance : $balance
-                        -predictedSpending : $predictedSpending
-                        -predictedAmount : $predictedAmount
-                        -dailySpending : $dailySpending
+                      
                         
                        Rules:
                        - Only answer finance related questions
@@ -109,6 +134,7 @@ Column(
 
                             val reply = GeminiAI.askGemini(prompt)
                             messages = messages + "Bot:$reply"
+                            isLoading = false
 
                         }
                     }
@@ -118,4 +144,6 @@ Column(
                 }
      }
 
-}}
+}}}
+
+

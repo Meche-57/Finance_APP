@@ -94,7 +94,7 @@ fun Nav_bar(navController: NavHostController) {
             composable("transaction") { TransactionScreen() }
             composable("Forecast") { ForecastScreen() }
             composable("Loan") { LoanScreen() }
-            composable("Chat") { ChatBotScreen(income= 100.0, expenses = 50.0, budget = 200.0, goals = 300.0, remainingBudget = 100.0, balance = 50.0, predictedSpending = 20.0, predictedAmount = 30.0, dailySpending = 1.0) }
+            composable("Chat") { ChatBotScreen() }
 
         }
     }

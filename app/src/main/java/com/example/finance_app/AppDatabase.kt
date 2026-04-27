@@ -11,6 +11,10 @@ abstract class AppDatabase: RoomDatabase(){
     abstract fun goalsDao(): GoalsDao
     abstract fun budgetDao(): BudgetDao
 
+    companion object
+
+
+
 }
 
 
