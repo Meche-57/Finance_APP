@@ -14,10 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.Color
 import com.example.finance_app.ui.theme.Card_Navy
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.Assistant
+import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.TrendingUp
 
 import androidx.compose.material3.Icon
 import com.example.finance_app.screens.ChatBotScreen
@@ -44,29 +49,29 @@ fun Nav_bar(navController: NavHostController) {
 
 
                 NavigationBarItem(
-                    icon = {Icon(Icons.Filled.List, contentDescription = "Transaction")},
+                    icon = {Icon(Icons.Default.Checklist, contentDescription = "Transaction")},
                     selected = false,
                     onClick = { navController.navigate("transaction") },
-                    label = { Text("Transactions") }
+                    label = { Text("Activity") }
                 )
 
 
                 NavigationBarItem(
-                    icon = {Icon(Icons.Filled.Check, contentDescription = "Forecast")},
+                    icon = {Icon(Icons.AutoMirrored.Filled.TrendingUp, contentDescription = "Forecast")},
                     selected = false,
                     onClick = { navController.navigate("Forecast") },
                     label = { Text("Forecast") }
                 )
 
                 NavigationBarItem(
-                    icon = {Icon(Icons.Filled.DateRange, contentDescription = "Loan")},
+                    icon = {Icon(Icons.Default.Calculate, contentDescription = "Loan")},
                     selected = false,
                     onClick = { navController.navigate("Loan") },
                     label = { Text("Loan") }
                 )
 
                 NavigationBarItem(
-                    icon = {Icon(Icons.Filled.DateRange, contentDescription = "Chat")},
+                    icon = {Icon(Icons.Filled.Assistant, contentDescription = "Chat")},
                     selected = false,
                     onClick = { navController.navigate("Chat") },
                     label = { Text("Chat") }

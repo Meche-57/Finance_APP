@@ -58,25 +58,25 @@ fun BudgetCard(
 // Progress bar colour
     val progressColor = when {
         budget <= 0 -> Text_Grey
-        progress >= 0.0f && progress < 0.5f -> IncomeGreen
-        progress >= 0.5f && progress < 0.79f -> BudgetYellow
-        progress >= 0.8f && progress < 0.9f -> BudgetOrange
+        progress >= 0.0f && progress < 0.8f -> IncomeGreen
+        progress >= 0.81f && progress < 0.98f -> BudgetOrange
+        progress >= 0.90f && progress < 1f -> ExpenseRed
         else -> ExpenseRed
     }
 // Progress Text
     val progressText = when {
         budget <= 0 -> "No Budget Set" // If no budget is set
-        progress >= 0.0f && progress < 0.5f -> "On Track"
-        progress >= 0.5f && progress < 0.75f -> "Almost Full"
-        progress >= 0.8f && progress < 0.9f -> "Full"
+        progress >= 0.0f && progress < 0.8f -> "On Track"
+        progress >= 0.81f && progress < 0.98f -> "Almost Full"
+        progress >= 0.99f && progress < 1f -> "Full"
         else -> "Over Budget"
     }
 
     val progressTextColour = when {
         budget <= 0 -> Text_Grey
-        progress >= 0.0f && progress < 0.5f -> IncomeGreen
-        progress >= 0.5f && progress < 0.75f -> BudgetYellow
-        progress >= 0.8f && progress < 0.9f -> BudgetOrange
+        progress >= 0.0f && progress < 0.8f -> IncomeGreen
+        progress >= 0.81f && progress < 0.98f -> BudgetOrange
+        progress >= 0.90f && progress < 1f -> ExpenseRed
         else -> ExpenseRed
     }
 

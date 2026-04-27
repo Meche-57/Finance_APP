@@ -13,14 +13,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.DeviceUnknown
+import androidx.compose.material.icons.filled.DirectionsBus
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -43,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
-import com.example.finance_app.ui.theme.Blue_Card
 import com.example.finance_app.ui.theme.ExpenseRed
 import com.example.finance_app.ui.theme.IncomeGreen
 import com.example.finance_app.ui.theme.Purple_Card
@@ -54,17 +61,16 @@ import com.example.finance_app.ui.theme.Text_White
 fun CategoryIcon(category: String?) : ImageVector{
     return when (category) {
 
-    "Food" -> Icons.Default.ThumbUp
-    "Transport" -> Icons.Default.Check
-    "Entertainment" -> Icons.Default.Add
+    "Food" -> Icons.Default.Fastfood
+    "Transport" -> Icons.Default.DirectionsBus
+    "Entertainment" -> Icons.Default.Movie
     "Shopping" -> Icons.Default.ShoppingCart
-    "Electronics" -> Icons.Default.Phone
-    "Bills" -> Icons.Default.Menu
-    "Income" -> Icons.Default.Lock
-    "Other" -> Icons.Default.Build
+    "Electronics" -> Icons.Default.Computer
+    "Bills" -> Icons.Default.House
+    "Income" -> Icons.Default.AttachMoney
+    "Other" -> Icons.Default.Add
 
-    else -> Icons.Default.Edit
-
+    else -> Icons.Default.DeviceUnknown
 
 }}
 
@@ -77,7 +83,7 @@ fun Recent_Activity() {
         spendingList = spendingDao.getAll()
     }
 
-    Text(text = "Recent Activity")
+    Text(text = "Recent Activity : ")
 
     Card(modifier = Modifier
         .fillMaxWidth(),

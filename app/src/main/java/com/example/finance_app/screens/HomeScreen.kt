@@ -7,7 +7,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,11 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import com.example.finance_app.Budget
-import com.example.finance_app.Goals
-
-
 import com.example.finance_app.components.BalanceCard
 import com.example.finance_app.components.BudgetCard
 import com.example.finance_app.components.Recent_Activity
@@ -171,13 +166,13 @@ fun HomeScreen() {
                             confirmButton = {
                                 Button(onClick = {
                                     scope.launch {
-                                        val newBudget = budgetInput.toDoubleOrNull() ?: 0.0
+                                        val newBudget = budgetInput.toDoubleOrNull() ?: 0.0 // default to 0.0 if conversion fails
                                         budgetDao.insertBudget(Budget(budgetGoal = newBudget))
                                         budget = newBudget
                                         remaining = if (budget <= 0) {
                                             0
                                         } else {
-                                            (budget - expenses).toInt()
+                                            (budget - expenses).toInt() // update remaining based on new budget
                                         }
                                         showBudgetDialog = false
 
@@ -187,6 +182,7 @@ fun HomeScreen() {
                                 }
 
                             },
+                            // cancel button
                             dismissButton = {
                                 Button(onClick = { showBudgetDialog = false }) {
                                     Text("Cancel")
