@@ -1,15 +1,19 @@
 package com.example.finance_app.screens
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +28,9 @@ import com.example.finance_app.components.ForecastProjectionCard
 import com.example.finance_app.ui.theme.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.example.finance_app.components.AIRecommendCard
 import com.example.finance_app.components.GeminiAI
 import com.example.finance_app.spendingDao
@@ -55,6 +62,49 @@ fun ForecastScreen() {
     // days left in month
     val daysRemaining = maxDays - currentDay
 
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Back_Navy // background colour
+
+    ) {
+
+        //Add Column to make Header box scrollable
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        )
+        {
+
+            // Top Header Box
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(155.dp)
+                    .background(Box_Navy),
+                contentAlignment = Alignment.TopStart
+            ) {
+                // context inside the box
+
+                Text(
+                    text = "Financial Forecast",
+                    color = Color.White,
+                    fontSize = 28.sp,
+                    modifier = Modifier.padding(top = 50.dp, start = 20.dp)
+
+                )
+
+                Text(
+                    text = "Predictions of your finances with AI suggestions",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 90.dp, start = 20.dp)
+
+
+                )
+            }
+
     LaunchedEffect(Unit) {
 
         // all transactions from Room database
@@ -76,8 +126,6 @@ fun ForecastScreen() {
         balance = income - expenses
 
 
-
-
         // daily spending
 
         dailySpending = expenses / 30
@@ -87,8 +135,8 @@ fun ForecastScreen() {
         predictedBalance = balance - (dailySpending * daysRemaining)
 
 
-            // Set prompt for the AI on what to respond to
-            val prompt = """
+        // Set prompt for the AI on what to respond to
+        val prompt = """
                         
                         You are FinanApp ChatBot, a personal finance assistant. 
                         Here is the user's financial data: 
@@ -118,70 +166,55 @@ fun ForecastScreen() {
 
         aiSuggestion = GeminiAI.askGemini(prompt)
 
-
     }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(scrollState)
+            modifier = Modifier
+                .padding(horizontal = 15.dp)
+                .offset(y = (-20).dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
 
-            Text("Forecast")
-            Spacer(modifier = Modifier.height(16.dp))
+                    ForecastProjectionCard(
+                        predictedBalance = predictedBalance,
+                        endOfMonth = balance,
+                        dailySpending = dailySpending,
+                        daysRemaining = daysRemaining
+                    )
 
-
-            ForecastProjectionCard(
-                predictedBalance = predictedBalance,
-                endOfMonth = balance,
-                dailySpending = dailySpending,
-                daysRemaining = daysRemaining
-            )
-
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
 
 
-            ) {
-                SmallBalanceCards(
-                    title = "Current Balance",
-                    value = "£${balance.toInt()}",
-                    desc = "Day $currentDay of $maxDays",
-                    modifier = Modifier.width(170.dp),
-                    status = "",
-                    backgroundColor = Blue_Card
+                    ) {
+                        SmallBalanceCards(
+                            title = "Current Balance",
+                            value = String.format("£%,.2f", balance),
+                            desc = "Day $currentDay of $maxDays",
+                            modifier = Modifier.width(180.dp),
+                            status = "",
+                            backgroundColor = Blue_Card
 
-                )
+                        )
+                        Spacer(modifier = Modifier.width(9.dp))
 
-                Spacer(modifier = Modifier.width(10.dp))
-                SmallBalanceCards(
+                        SmallBalanceCards(
 
-                    title = "Average Spending ",
-                    value = "£${dailySpending.toInt()}",
-                    desc = "per day",
-                    modifier = Modifier.width(170.dp),
-                    status = "",
-                    backgroundColor = Purple_Card
-                )
-            }
+                            title = "Daily Spending ",
+                            value = String.format("£%,.2f", dailySpending),
+                            desc = "per day",
+                            modifier = Modifier.width(180.dp),
+                            status = "",
+                            backgroundColor = Purple_Card
+                        )
+                    }
 
-            Spacer(modifier = Modifier.height(10.dp))
+                     AIRecommendCard(aiSuggestion)
 
-
-
-            AIRecommendCard(aiSuggestion)
+                    Spacer(modifier = Modifier.height(10.dp))
 
 
+                }
+            }}}
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-
-
-        }
-    }
-}

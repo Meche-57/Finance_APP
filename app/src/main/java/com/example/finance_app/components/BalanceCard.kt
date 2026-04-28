@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -64,7 +66,7 @@ fun BalanceCard(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            //whole number with commas %,.2f formatt
+            //whole number with commas %,.2f format
             Text(
                 text = String.format("£%,.2f", balance),
                 color = Color.White,
@@ -90,6 +92,7 @@ fun BalanceCard(
 
                         Spacer(modifier = Modifier.height(50.dp))
 
+                        // Income icon and text
                         Box(
                             modifier = Modifier.size(22.dp)
                                 .background(Green_Card),
@@ -97,7 +100,7 @@ fun BalanceCard(
                         ) {
 
                             Icon(
-                                imageVector = Icons.Default.KeyboardArrowUp,
+                                imageVector = Icons.Default.ArrowUpward,
                                 contentDescription = "Income",
                                 modifier = Modifier.size(15.dp)
                             )
@@ -115,7 +118,7 @@ fun BalanceCard(
                     }
 
                     Text(
-                        text = "£${income.toInt()}",
+                        text = String.format("£%,.2f",income),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 25.sp
@@ -131,7 +134,7 @@ fun BalanceCard(
                     Row(verticalAlignment = Alignment.CenterVertically) {
 
                         Spacer(modifier = Modifier.height(50.dp))
-
+                        // expense box icon and text
                         Box(
                             modifier = Modifier.size(22.dp)
                                 .background(BudgetRed),
@@ -139,13 +142,12 @@ fun BalanceCard(
                         ) {
 
                             Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
+                                imageVector = Icons.Default.ArrowDownward,
                                 contentDescription = "Expense",
                                 tint = Color.White,
                                 modifier = Modifier.size(15.dp)
                             )
                         }
-
 
                         Spacer(modifier = Modifier.width(8.dp))
 
@@ -158,7 +160,7 @@ fun BalanceCard(
 
 
                     Text(
-                        text = "£${expenses.toInt()}",
+                        text = String.format("£%,.2f",expenses),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 25.sp

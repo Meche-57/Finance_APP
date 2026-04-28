@@ -1,6 +1,4 @@
 package com.example.finance_app.components
-
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,21 +45,16 @@ fun SmallBalanceCards(
 
 
             ) {
-
                 Text(
                     text = title,
                     color = Text_White
 
                 )
-
-
                 Text(
                     text = status,
                     color = Text_White
 
-
                 )}
-
 
                     Spacer(modifier = Modifier.height(8.dp))
 

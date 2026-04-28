@@ -24,19 +24,16 @@ import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.ui.theme.Text_White
 import kotlin.math.pow
 
-
 @Composable
 
 fun LoanCalculator() {
-
     var amount by remember { mutableStateOf("") }
     var interest by remember { mutableStateOf("") }
     var term by remember { mutableStateOf("") }
 
-
-    val LoanAmount = amount.toDoubleOrNull() ?: 0.0
-    val InterestRate = (interest.toDoubleOrNull() ?: 0.0)/ 100 / 12   //100 turns to decimal 12 is months
-    val LoanTerm = (term.toDoubleOrNull() ?: 0.0) * 12  // number of payments
+    val LoanAmount =  amount.replace(",", "").toDoubleOrNull() ?: 0.0
+    val InterestRate = (interest.replace(",", "").toDoubleOrNull() ?: 0.0)/ 100 / 12   //100 turns to decimal 12 is months
+    val LoanTerm = (term.replace(",", "").toDoubleOrNull() ?: 0.0) * 12  // number of payments
 
     val monthly = if (LoanAmount == 0.0 || LoanTerm == 0.0) {
         0.0
@@ -54,7 +51,6 @@ fun LoanCalculator() {
         colors = CardDefaults.cardColors(containerColor = Box_Navy)
 
     ) {
-
         // Make a row to have two columns
         Row(modifier = Modifier.padding(16.dp)) {
 
@@ -83,8 +79,6 @@ fun LoanCalculator() {
 
                 )
             }
-
-
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 

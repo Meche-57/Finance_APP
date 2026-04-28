@@ -32,31 +32,22 @@ import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.LocalContext
 import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.ui.theme.Text_White
 import java.util.Calendar
-
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-
-
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.finance_app.budgetDao
 import com.example.finance_app.components.BalanceCard
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
@@ -80,7 +71,10 @@ fun TransactionScreen() {
     var date by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
 
-
+    val validInput = name.isNotEmpty() &&
+        amount.isNotEmpty() &&
+        date.isNotEmpty() &&
+        category.isNotEmpty()
 
     // Create an empty List
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
@@ -130,6 +124,15 @@ fun TransactionScreen() {
             contentAlignment = Alignment.TopStart
         ) {
 
+
+            Text(
+                text = "Recent Activity",
+                color = Color.White,
+                fontSize = 28.sp,
+                modifier = Modifier.padding(top = 60.dp, start = 20.dp)
+
+            )
+
         }
 
         LaunchedEffect(Unit){
@@ -154,7 +157,7 @@ fun TransactionScreen() {
         Column(
             modifier = Modifier
                 .padding(horizontal = 15.dp)
-                .padding(top = 70.dp),
+                .padding(top = 120.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
 
@@ -165,22 +168,25 @@ fun TransactionScreen() {
 
 
         )
-        //Button to Add Transactions
+
+        //BUTTON -> Add Transactions
         Button(onClick = { showDialog = true },
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(12.dp),
             modifier =  Modifier.fillMaxWidth()
-                .padding(6.dp))
+                .padding(3.dp))
 
 
         {
             Text(text = " Add Transaction",
-                textAlign = TextAlign.Left,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(18.dp),
+                fontSize = 17.sp
+
                )
 
             Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
+                imageVector = Icons.Default.EditNote,
                 contentDescription = "Add Transaction",
+
 
             )
         }
@@ -245,6 +251,14 @@ fun TransactionScreen() {
 
                 text = {
                     Column {
+
+                        if(!validInput){
+                            Text(
+                                modifier = Modifier.padding(10.dp),
+                                text = "Please fill in all fields",
+                                color = Color.Red
+                            )
+                        }
 
                         // Name of Transaction
                         TextField(
@@ -372,7 +386,9 @@ fun TransactionScreen() {
 
 
                                     }
-                                }) {
+                                },
+                                    enabled = validInput
+                                ) {
                                     Text("Done")
 
 

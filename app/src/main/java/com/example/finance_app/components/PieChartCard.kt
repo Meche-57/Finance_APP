@@ -24,21 +24,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Card_Navy
+import com.example.finance_app.ui.theme.Text_Grey
+import com.example.finance_app.ui.theme.billsColor
+import com.example.finance_app.ui.theme.electronicsColor
+import com.example.finance_app.ui.theme.entertainmentColor
+import com.example.finance_app.ui.theme.foodColor
+import com.example.finance_app.ui.theme.otherColor
+import com.example.finance_app.ui.theme.pieOutline
+import com.example.finance_app.ui.theme.transportColor
+import com.example.finance_app.ui.theme.shoppingColor
 
 
 fun categoryColors(category:String): Color {
     return when (category){
-
-
-       "Income" -> Color(0xFFF44336)
-        "Food" ->Color(0xFFE91E63)
-        "Transport" -> Color(0xFF9C27B0)
-        "Entertainment" -> Color(0xFF673AB7)
-        "Shopping" -> Color(0xFF3F51B5)
-        "Electronics" -> Color(0xFF2196F3)
-        "Bills" -> Color(0xFF03A9F4)
-        "Other" -> Color(0xFF00BCD4)
+        "Food" -> foodColor
+        "Transport" -> transportColor
+        "Entertainment" -> entertainmentColor
+        "Shopping" -> shoppingColor
+        "Electronics" -> electronicsColor
+        "Bills" -> billsColor
+        "Other" -> otherColor
         else -> Color.Gray }}
 
 @Composable
@@ -105,7 +112,7 @@ fun Charts(values: List<Float>, categories: List<String>) {
 
 
                             drawArc(
-                                color = Color.White, // colors for each slice
+                                color = pieOutline, // colors for each slice
                                 startAngle = startAngle,
                                 sweepAngle = sliceSize,
                                 useCenter = true, // draws the circle in the middle

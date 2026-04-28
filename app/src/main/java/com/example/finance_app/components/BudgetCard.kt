@@ -1,6 +1,4 @@
 package com.example.finance_app.components
-
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.BudgetOrange
-import com.example.finance_app.ui.theme.BudgetYellow
 import com.example.finance_app.ui.theme.ExpenseRed
 import com.example.finance_app.ui.theme.IncomeGreen
 import com.example.finance_app.ui.theme.Text_Grey
@@ -37,7 +33,7 @@ import com.example.finance_app.ui.theme.Text_Grey
 @Composable
 fun BudgetCard(
 
-    remaining: Int,
+    remaining: Double,
     daysRemaining:Int,
     budget: Double,
     expenses: Double,
@@ -90,9 +86,6 @@ fun BudgetCard(
     val year = currentDate.get(java.util.Calendar.YEAR)
 
 
-
-
-
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Card_Navy.copy(0.9f)),
@@ -112,7 +105,7 @@ fun BudgetCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-
+                // Progress text and colour /OnTrack/Almost Full/Full/Over Budget
                 Text(
                     text = progressText,
                     color = progressTextColour,
@@ -120,6 +113,8 @@ fun BudgetCard(
                     fontSize = 12.sp
 
                 )
+
+                // Edit Text
 
                 Text(
                     text = "Edit",
@@ -136,6 +131,8 @@ fun BudgetCard(
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
+
+            // Current Month and year
 
             Text(
                 text = "$monthName $year",
@@ -196,7 +193,7 @@ fun BudgetCard(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(text = "Remaining", color = Color.LightGray, fontSize = 12.sp)
                 Text(
-                    text = "£$remaining",
+                    text = String.format("£%,.2f", remaining),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
@@ -230,7 +227,7 @@ fun BudgetCard(
 
                 Text(text = "Monthly Budget", color = Color.LightGray, fontSize = 12.sp)
                 Text(
-                    text = if (budget < 0) "-£${-budget}" else "£$budget",
+                    text = if (budget < 0) String.format("£%,.2f", -budget) else String.format("£%,.2f",budget),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp

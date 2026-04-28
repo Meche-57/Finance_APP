@@ -35,6 +35,8 @@ import com.example.finance_app.ui.theme.Back_Navy
 import com.example.finance_app.ui.theme.Box_Navy
 import com.example.finance_app.Spending
 import com.example.finance_app.budgetDao
+import com.example.finance_app.ui.theme.Card_Navy
+import com.example.finance_app.ui.theme.Text_White
 import kotlinx.coroutines.launch
 
 
@@ -46,7 +48,7 @@ fun HomeScreen() {
     var expenses by remember { mutableStateOf(0.0) }
     var balance by remember { mutableStateOf(0.0) }
     var spendingList by remember { mutableStateOf(emptyList<Spending>()) }
-    var remaining by remember { mutableStateOf(0) }
+    var remaining by remember { mutableStateOf(0.0) }
     var budget by remember { mutableStateOf(0.0) }
 
     var showBudgetDialog by remember { mutableStateOf(false) }
@@ -84,10 +86,10 @@ fun HomeScreen() {
         balance = income - expenses
 
 // remaining should dbe 0 when budget is not set
-        remaining = if (budget <= 0) {
-            0
+        remaining = if (budget <= 0.0) {
+            0.0
         } else {
-            (budget - expenses).toInt()
+            (budget - expenses)
 
         }
     }
@@ -116,9 +118,9 @@ fun HomeScreen() {
                     // context inside the box
 
                     Text(
-                        text = "Hello User ,",
+                        text = "Welcome, user",
                         color = Color.White,
-                        fontSize = 32.sp,
+                        fontSize = 28.sp,
                         modifier = Modifier.padding(top = 60.dp, start = 20.dp)
 
                     )
@@ -126,7 +128,7 @@ fun HomeScreen() {
                 //Positions of the cards
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
+                        .padding(horizontal = 15.dp)
                         .offset(y = (-35).dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
@@ -153,6 +155,10 @@ fun HomeScreen() {
                         AlertDialog(
                             onDismissRequest = { showBudgetDialog = false },
                             title = { Text("Edit Budget") },
+                            containerColor = Card_Navy,
+                            textContentColor = Text_White,
+                            titleContentColor = Text_White,
+
                             text = {
                                 TextField(
                                     value = budgetInput,
@@ -166,13 +172,13 @@ fun HomeScreen() {
                             confirmButton = {
                                 Button(onClick = {
                                     scope.launch {
-                                        val newBudget = budgetInput.toDoubleOrNull() ?: 0.0 // default to 0.0 if conversion fails
+                                        val newBudget = budgetInput.replace(",", "").toDoubleOrNull() ?: 0.0 // If user also adds commas to input or a space between numbers handles
                                         budgetDao.insertBudget(Budget(budgetGoal = newBudget))
                                         budget = newBudget
-                                        remaining = if (budget <= 0) {
-                                            0
+                                        remaining = if (budget <= 0.0) {
+                                            0.0
                                         } else {
-                                            (budget - expenses).toInt() // update remaining based on new budget
+                                            (budget - expenses) // update remaining based on new budget
                                         }
                                         showBudgetDialog = false
 

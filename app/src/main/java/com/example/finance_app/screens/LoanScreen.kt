@@ -1,17 +1,22 @@
 package com.example.finance_app.screens
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,12 +34,17 @@ import com.example.finance_app.ui.theme.Card_Navy
 import com.example.finance_app.Goals
 import com.example.finance_app.goalsDao
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
+import com.example.finance_app.ui.theme.Back_Navy
+import com.example.finance_app.ui.theme.Box_Navy
+import com.example.finance_app.ui.theme.Text_White
 import kotlinx.coroutines.launch
 
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-
 
 fun LoanScreen() {
 
@@ -46,21 +56,73 @@ fun LoanScreen() {
     var goalsList by remember { mutableStateOf(emptyList<Goals>()) }
     var showDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) { // show data when app is opened
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Back_Navy // background colour
+
+    ) {
+
+        //Add Column to make Header box scrollable
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        )
+        {
+
+            // Top Header Box
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(155.dp)
+                    .background(Card_Navy),
+                contentAlignment = Alignment.TopStart
+            ) {
+                // context inside the box
+                Text(
+                    text = "Loan & Goal",
+                    color = Color.White,
+                    fontSize = 28.sp,
+                    modifier = Modifier.padding(top = 40.dp, start = 20.dp)
+
+                )
+
+                Text(
+                    text = "Calculate and compare loan options and Add Goals",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 85.dp, start = 20.dp))
+            }
+
+
+            LaunchedEffect(Unit) { // show data when app is opened
         goalsList = goalsDao.getAll()
     }
 
-    Column(modifier = Modifier.padding(15.dp)
-        .verticalScroll(rememberScrollState())) {
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 15.dp)
+            .offset(y = (-20).dp),
+
+    ) {
 
         LoanCalculator()
 
         Spacer(modifier = Modifier.height(25.dp))
 
         Row(modifier = Modifier.fillMaxWidth(),
-         horizontalArrangement = Arrangement.End){
+         horizontalArrangement = Arrangement.SpaceBetween){
 
-        Button(onClick = {
+            Text(
+                text = "Add Your Goals",
+                modifier = Modifier.padding(10.dp),
+                fontSize = 19.sp,
+                color = Color.White)
+
+
+            Button(onClick = {
             editingGoal = null
             title = ""
             current = ""
@@ -104,6 +166,10 @@ fun LoanScreen() {
         AlertDialog(
             onDismissRequest = { showDialog = false },// when user closes it,
             title = { Text("Add Goal") },
+            containerColor = Card_Navy,
+            textContentColor = Text_White,
+            titleContentColor = Text_White,
+
 
             text = {
 
@@ -143,8 +209,8 @@ fun LoanScreen() {
 
                             Goals(
                                 title = title,
-                                current = current.toDoubleOrNull() ?: 0.0,
-                                goal = goal.toDoubleOrNull() ?: 0.0
+                                current = current.replace(",", "").toDoubleOrNull() ?: 0.0,
+                                goal = goal.replace(",", "").toDoubleOrNull() ?: 0.0
                             )
                         )
                     } else {
@@ -152,8 +218,8 @@ fun LoanScreen() {
                         Goals(
                             id = editingGoal!!.id,
                             title = title,
-                            current = current.toDoubleOrNull() ?: 0.0,
-                            goal = goal.toDoubleOrNull() ?: 0.0
+                            current = current.replace(",", "").toDoubleOrNull() ?: 0.0,
+                            goal = goal.replace(",", "").toDoubleOrNull() ?: 0.0
 
                         )
                     )
@@ -180,4 +246,4 @@ fun LoanScreen() {
             }
         )
     }
-}
+}}}

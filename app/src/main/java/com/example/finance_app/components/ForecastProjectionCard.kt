@@ -1,5 +1,4 @@
 package com.example.finance_app.components
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.finance_app.ui.theme.*
 
@@ -37,7 +35,7 @@ fun ForecastProjectionCard(
         Column(modifier = Modifier.padding(20.dp)) {
 
             Text(
-                text = "Forecast Projection",
+                text = "Balance Projection",
                 color = Text_White,
                 fontSize = 18.sp
 
@@ -48,10 +46,10 @@ fun ForecastProjectionCard(
             SmallBalanceCards(
 
                 title = "Predicted Balance",
-                value = "£${predictedBalance.toInt()}",
+                value = String.format("£%,.2f", predictedBalance),
                 desc = "Based on current spending trends",
                 modifier = Modifier.fillMaxWidth(),
-                status = "£${endOfMonth.toInt()}",
+                status = String.format("£%,.2f" , endOfMonth),
                 backgroundColor = Green_Card
 
             )
@@ -60,8 +58,8 @@ fun ForecastProjectionCard(
 
             SmallBalanceCards(
                 title = "End of April",
-                value = "£${endOfMonth.toInt()}",
-                desc = "Daily Spending: £${dailySpending.toInt()} ",
+                value = String.format("£%,.2f",endOfMonth),
+                desc = "Daily Spending: " + String.format("£%,.2f", dailySpending),
                 modifier = Modifier.fillMaxWidth(),
                 status = "",
                 backgroundColor = Purple_Card
